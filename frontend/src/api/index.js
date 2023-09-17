@@ -1,11 +1,13 @@
 //export restful functions to be used elsewhere
 //use the fakeStoreAPI for now but replace the code when the custom backend is completed
 
+const BASE_API_URL = 'https://fakestoreapi.com';
+
 /*** products ***/
 //GET
 export async function getAllProducts() {
     try {
-        const response = await fetch('https://fakestoreapi.com/products');
+        const response = await fetch(`${BASE_API_URL}/products`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -14,29 +16,35 @@ export async function getAllProducts() {
 }
 
 //GET
-export async function getSingleProduct() {
+export async function getSingleProduct(productId) {
     try {
-
+        const response = await fetch(`${BASE_API_URL}/products/${productId}`);
+        const result = await response.json();
+        return result;
     } catch (error) {
-
+        console.log(error);
     }
 }
 
 //GET
 export async function getAllCategories() {
     try {
-
+        const response = await fetch(`${BASE_API_URL}/products/categories`);
+        const result = await response.json();
+        return result;
     } catch (error) {
-
+        console.log(error);
     }
 }
 
 //GET
-export async function getProductsInCategory(category) {
+export async function getProductsInCategory(categoryName) {
     try {
-
+        const response = await fetch(`${BASE_API_URL}/products/category/${categoryName}`);
+        const result = await response.json();
+        return result;
     } catch (error) {
-
+        console.log(error);
     }
 }
 
@@ -46,7 +54,7 @@ export async function getCartItems() {
     try {
 
     } catch (error) {
-
+        console.log(error);
     }
 }
 
@@ -55,7 +63,7 @@ export async function addCartItem(item) {
     try {
 
     } catch (error) {
-
+        console.log(error);
     }
 }
 
@@ -64,7 +72,7 @@ export async function editCartItem(item) {
     try {
 
     } catch (error) {
-
+        console.log(error);
     }
 }
 
@@ -73,7 +81,7 @@ export async function deleteCartItem(item) {
     try {
 
     } catch (error) {
-
+        console.log(error);
     }
 }
 
@@ -83,7 +91,7 @@ export async function getAllOrders() {
     try {
 
     } catch (error) {
-
+        console.log(error);
     }
 }
 
@@ -92,7 +100,7 @@ export async function getOrder(order) {
     try {
 
     } catch (error) {
-
+        console.log(error);
     }
 }
 
@@ -102,7 +110,7 @@ export async function registerUser(username, password) {
     try {
 
     } catch (error) {
-
+        console.log(error);
     }
 }
 
@@ -111,7 +119,7 @@ export async function signInUser(username, password) {
     try {
 
     } catch (error) {
-
+        console.log(error);
     }
 }
 
@@ -120,6 +128,6 @@ export async function getCurrentUser() {
     try {
 
     } catch (error) {
-
+        console.log(error);
     }
 }
