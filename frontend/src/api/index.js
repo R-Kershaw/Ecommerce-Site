@@ -13,6 +13,33 @@ export async function getAllProducts() {
     }
 }
 
+//GET
+export async function getSingleProduct() {
+    try {
+
+    } catch (error) {
+
+    }
+}
+
+//GET
+export async function getAllCategories() {
+    try {
+
+    } catch (error) {
+
+    }
+}
+
+//GET
+export async function getProductsInCategory(category) {
+    try {
+
+    } catch (error) {
+
+    }
+}
+
 /*** cart ***/
 //GET
 export async function getCartItems() {

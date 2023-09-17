@@ -30,6 +30,7 @@ export default function Home() {
             <h1>
                 Home Page
             </h1>
+            <br></br>
             <div>
                 {allProducts.map(product => (
                     <Product key={product.id} product={product} />
