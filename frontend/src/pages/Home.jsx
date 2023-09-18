@@ -47,14 +47,50 @@ export default function Home() {
             const productsInCategoryData = await getProductsInCategory(categoryName);
             setAllProducts(productsInCategoryData);
         }
-        else
-        {
+        else {
             //if the category name is invalid or doesn't exist, just show all items
             const productsInCategoryData = await getAllProducts();
             setAllProducts(productsInCategoryData);
             console.log("value does not exists in this object");
         }
         console.log(allProducts);
+    }
+
+    //sort functions
+    //low to high
+    
+    //helper object to prevent spelling errors
+    const SORT_TYPE = {
+        PRICE_ASCENDING: 'priceAscending',
+        PRICE_DESCENDING: 'priceDescending'
+    }
+    
+    function sortProductsByType(type) {
+        //spread to create a shallow copy (then set the original array as the shallow copy to re-render the array)
+        let sortedProducts = [...allProducts];
+        switch (type) {
+            case SORT_TYPE.PRICE_ASCENDING:
+                sortedProducts = [...allProducts].sort((a, b) => a.price > b.price ? 1 : -1);
+                break;
+            case SORT_TYPE.PRICE_DESCENDING:
+                sortedProducts = [...allProducts].sort((a, b) => a.price < b.price ? 1 : -1);
+                break;
+            default:
+                throw new Error();
+        }
+        setAllProducts(sortedProducts);
+    }
+
+    function ascendingPrice() {
+        //spread to create a shallow copy then set the original array as the shallow copy to re-render
+        const sortedProducts = [...allProducts].sort((a, b) => a.price > b.price ? 1 : -1);
+        setAllProducts(sortedProducts);
+    }
+
+    //high to low
+    function descendingPrice(a, b) {
+        const sortedProducts = [...allProducts].sort((a, b) => a.price < b.price ? 1 : -1);
+        setAllProducts(sortedProducts);
     }
 
     return (
@@ -65,6 +101,8 @@ export default function Home() {
             <br></br>
             <div>
                 <button onClick={() => showProductsInCategory('electronics')}>Electronics</button>
+                <button onClick={() => sortProductsByType(SORT_TYPE.PRICE_ASCENDING)}>Sort By Price Ascending</button>
+                <button onClick={() => sortProductsByType(SORT_TYPE.PRICE_DESCENDING)}>Sort By Price Descending</button>
                 {allProducts.map(product => (
                     <Product key={product.id} product={product} />
                 ))}
