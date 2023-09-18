@@ -19,6 +19,12 @@ export default function Home() {
         REVIEWS_DESCENDING: 'reviewsDescending'
     }
 
+    const FILTER_TYPE = {
+        PRICE: 'price',
+        RATING: 'rating',
+        REVIEWS: 'reviews'
+    }
+
     useEffect(() => {
         async function fetchData() {
             const productData = await getAllProducts();
@@ -60,7 +66,7 @@ export default function Home() {
         console.log(allProducts);
     }
 
-    //sort by price, rating, popularity
+    //sort by price, rating, and review count
     function sortProductsByType(type) {
         //spread to create a shallow copy (then set the original array as the shallow copy to re-render the array)
         let sortedProducts = [...allProducts];
@@ -89,9 +95,24 @@ export default function Home() {
         setAllProducts(sortedProducts);
     }
 
-    //filter by category, price, rating, popularity
-    function filterByType(type) {
-
+    //filter by price, rating, and review count based on a min and max value
+    function filterProductsByType(type, min, max) {
+        let filteredProducts = [...allProducts];
+        switch (type) {
+            case FILTER_TYPE.PRICE:
+                filteredProducts = [...allProducts].filter((product) => product.price >= min && product.price <= max);
+                break;
+            case FILTER_TYPE.RATING:
+                filteredProducts = [...allProducts].filter((product) => product.rating.rate >= min && product.rating.rate <= max);
+                break;
+            case FILTER_TYPE.REVIEWS:
+                filteredProducts = [...allProducts].filter((product) => product.rating.count >= min && product.rating.count <= max);
+                break;
+            default:
+                throw new Error();
+        }
+        setAllProducts(filteredProducts);
+        console.log(filteredProducts);
     }
 
     return (
@@ -102,12 +123,17 @@ export default function Home() {
             <br></br>
             <div>
                 <button onClick={() => showProductsInCategory('electronics')}>Electronics</button>
+                {/*   
                 <button onClick={() => sortProductsByType(SORT_TYPE.PRICE_ASCENDING)}>Price Ascending</button>
                 <button onClick={() => sortProductsByType(SORT_TYPE.PRICE_DESCENDING)}>Price Descending</button>
                 <button onClick={() => sortProductsByType(SORT_TYPE.RATING_ASCENDING)}>Rating Ascending</button>
                 <button onClick={() => sortProductsByType(SORT_TYPE.RATING_DESCENDING)}>Rating Descending</button>
                 <button onClick={() => sortProductsByType(SORT_TYPE.REVIEWS_ASCENDING)}>Reviews Ascending</button>
                 <button onClick={() => sortProductsByType(SORT_TYPE.REVIEWS_DESCENDING)}>Reviews Descending</button>
+                */}
+                <button onClick={() => filterProductsByType(FILTER_TYPE.PRICE, 0, 25)}>Filter By Price</button>
+                <button onClick={() => filterProductsByType(FILTER_TYPE.RATING, 4, 5)}>Filter By Rating</button>
+                <button onClick={() => filterProductsByType(FILTER_TYPE.REVIEWS, 100, 300)}>Filter By Reviews</button>
                 {allProducts.map(product => (
                     <Product key={product.id} product={product} />
                 ))}
