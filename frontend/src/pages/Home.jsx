@@ -1,8 +1,10 @@
 import { getAllCategories, getAllProducts, getProductsInCategory, getSingleProduct } from "../api";
 import { useEffect, useState } from "react";
-import Product from "../components/Product";
+import ProductCard from "../components/ProductCard";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+    const navigate = useNavigate();
     const [allProducts, setAllProducts] = useState([]);
     const [singleProduct, setSingleProduct] = useState(null);
     const [allCategories, setAllCategories] = useState([]);
@@ -37,11 +39,6 @@ export default function Home() {
         }
         fetchData();
     }, []);
-
-    console.log(allProducts);
-    //   console.log(singleProduct);
-    //   console.log(allCategories);
-    //   console.log(productsInCategory);
 
     if (loading) {
         return (
@@ -135,7 +132,11 @@ export default function Home() {
                 <button onClick={() => filterProductsByType(FILTER_TYPE.RATING, 4, 5)}>Filter By Rating</button>
                 <button onClick={() => filterProductsByType(FILTER_TYPE.REVIEWS, 100, 300)}>Filter By Reviews</button>
                 {allProducts.map(product => (
-                    <Product key={product.id} product={product} />
+                    <ProductCard 
+                    key={product.id} 
+                    product={product} 
+                    onClick={()=>navigate(`/productDetails/${product.id}`)}
+                    />
                 ))}
             </div>
         </>
