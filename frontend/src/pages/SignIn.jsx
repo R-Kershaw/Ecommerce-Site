@@ -1,10 +1,10 @@
 import { json, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { signInUser } from "../api";
+import AuthContext, { ACTION } from "../contexts/AuthContext";
 
 export default function SignIn() {
-    const [username, setUsername] = useState("");
-    const [password, setPasssword] = useState("");
+    const { username, password, token, isSignedIn, dispatch } = useContext(AuthContext);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
@@ -12,19 +12,30 @@ export default function SignIn() {
         event.preventDefault();
 
         try {
+            //    const userData = await signInUser(username, password);
             const userData = await signInUser(username, password);
-            console.log(userData);
+            await dispatch({ type: ACTION.SIGN_IN, payload: userData.token });
+            await localStorage.setItem("tokenId", userData.token);
+            await localStorage.setItem("username", username);
+            console.log(userData.token);
+            console.log(token);
             //set userData in authContext and localStorage
             if (userData.token) {
-                navigate(`/`);
+                    navigate(`/`);
             }
             else {
+                //create a notification displaying what the error is
                 setError(json.error);
             }
         } catch (error) {
             setError(error.message);
         }
     }
+    console.log("local storage token: " + localStorage.getItem("tokenId"));
+    console.log("local storage name: " + localStorage.getItem("username"));
+    console.log(isSignedIn);
+    console.log(token);
+    console.log(username);
 
     return (
         <>
@@ -38,18 +49,23 @@ export default function SignIn() {
                         Username:{""}
                         <input
                             value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            onChange={(e) => dispatch({ type: ACTION.SET_USERNAME, payload: e.target.value })}
                         />
                     </label>
                     <label>
                         Password:{""}
                         <input type="password"
                             value={password}
-                            onChange={(e) => setPasssword(e.target.value)}
+                            onChange={(e) => dispatch({ type: ACTION.SET_PASSWORD, payload: e.target.value })}
                         />
                     </label>
                     <button>Sign In</button>
                 </form>
+                <br></br>
+                <button onClick={()=>{
+                    dispatch({type:ACTION.SIGN_OUT});
+                    localStorage.clear();
+                }}>Sign Out</button>
             </div>
         </>
     )
