@@ -8,11 +8,6 @@ export const CART_ACTION = {
     EDIT_PRODUCT: "editProduct",
     DELETE_PRODUCT: "deleteProduct",
 }
-/*case CART_ACTION.ADD_PRODUCT:
-            console.log(action);
-            console.log(action.payload.id);
-            console.log(action.payload.quantity);
-            return { ...state } */
 
 export const cartReducer = (state, action) => {
     //gets a reference to the object to directly modify its properties
