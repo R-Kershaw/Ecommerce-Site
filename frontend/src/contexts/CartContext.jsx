@@ -6,7 +6,7 @@ export const CART_ACTION = {
     FETCH_CART: "fetchCart", //fetching user's cart from the server
     ADD_PRODUCT: "addProduct",
     EDIT_PRODUCT: "editProduct",
-    DELETE_PRODUCT: "deleteProduct",
+    DELETE_PRODUCT: "deleteProduct"
 }
 
 export const cartReducer = (state, action) => {
@@ -19,6 +19,7 @@ export const cartReducer = (state, action) => {
         case CART_ACTION.FETCH_CART:
             break;
         case CART_ACTION.ADD_PRODUCT: //if a product already exists in the cart then update its quantity property, otherwise add the new product to the end of the cart
+            state.totalQuantity += action.payload.quantity;
             //update the newly modified product that was found
             if (foundProduct) {
                 foundProduct.quantity += action.payload.quantity;
@@ -29,7 +30,12 @@ export const cartReducer = (state, action) => {
                 return { ...state, cart: [...state.cart, { id: action.payload.id, quantity: action.payload.quantity }] }
             }
         case CART_ACTION.EDIT_PRODUCT: //you can only edit products that exist in the cart
+
             if (foundProduct) {
+                //update the totalQuantity with the new product quantity
+                state.totalQuantity -= foundProduct.quantity;
+                state.totalQuantity += action.payload.quantity;
+
                 foundProduct.quantity = action.payload.quantity;
                 return { ...state, cart: [...state.cart] }
             }
@@ -37,6 +43,9 @@ export const cartReducer = (state, action) => {
                 return { ...state }
             }
         case CART_ACTION.DELETE_PRODUCT:
+            if (foundProduct) {
+                state.totalQuantity -= foundProduct.quantity;
+            }
             const filteredOutProducts = state.cart.filter(product => product.id !== action.payload.id);
             return { ...state, cart: [...filteredOutProducts] }
         default:
@@ -45,7 +54,7 @@ export const cartReducer = (state, action) => {
 }
 
 export const CartContextProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(cartReducer, { cart: [] });
+    const [state, dispatch] = useReducer(cartReducer, { cart: [], totalQuantity: 0 });
 
     //if the user is logged in, fetch their saved cart from the server
     useEffect(() => {

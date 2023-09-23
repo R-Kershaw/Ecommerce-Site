@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { addCartItem } from "../api";
 
 export default function Cart() {
-    const { cart, dispatch } = useContext(CartContext);
+    const { cart, totalQuantity, dispatch } = useContext(CartContext);
     const navigate = useNavigate();
 
     async function fetchCart() {
@@ -48,6 +48,15 @@ export default function Cart() {
         }
     }
 
+    async function getCartQuantity() {
+        try {
+            console.log('cart quantity: ' + totalQuantity);
+            console.log('Cart Page state:', cart);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <>
             <h1>
@@ -63,7 +72,9 @@ export default function Cart() {
             <button onClick={() => deleteProduct(2)}>Remove product id 2</button>
             <br></br>
             <button onClick={() => deleteProduct(99)}>Remove product id 99</button>
-            
+            <br></br>
+            <button onClick={() => getCartQuantity()}>Get cart quantity</button>
+
         </>
     )
 }
