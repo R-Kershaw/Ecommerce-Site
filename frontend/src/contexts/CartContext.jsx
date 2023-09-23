@@ -42,7 +42,8 @@ export const cartReducer = (state, action) => {
                 return { ...state }
             }
         case CART_ACTION.DELETE_PRODUCT:
-            break;
+            const filteredOutProducts = state.cart.filter(product => product.id !== action.payload.id);
+            return { ...state, cart: [...filteredOutProducts] }
         default:
             throw Error('Unknown action: ' + action.type);
     }

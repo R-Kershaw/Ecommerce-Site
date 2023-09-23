@@ -39,9 +39,10 @@ export default function Cart() {
         }
     }
 
-    async function deleteProduct() {
+    async function deleteProduct(productId) {
         try {
-
+            dispatch({ type: CART_ACTION.DELETE_PRODUCT, payload: { id: productId } });
+            console.log('Cart Page state:', cart);
         } catch (error) {
             console.log(error);
         }
@@ -53,11 +54,16 @@ export default function Cart() {
                 Cart Page
             </h1>
             <br></br>
-            <button onClick={() => addProduct(2, 1)}>Add To Cart</button>
+            <button onClick={() => addProduct(2, 1)}>Add To Cart id 2</button>
             <br></br>
-            <button onClick={() => editProduct(2, 2)}>Edit Cart</button>
+            <button onClick={() => addProduct(99, 1)}>Add To Cart id 99</button>
             <br></br>
-            <button>Remove product</button>
+            <button onClick={() => editProduct(2, 2)}>Edit Cart id 2</button>
+            <br></br>
+            <button onClick={() => deleteProduct(2)}>Remove product id 2</button>
+            <br></br>
+            <button onClick={() => deleteProduct(99)}>Remove product id 99</button>
+            
         </>
     )
 }
