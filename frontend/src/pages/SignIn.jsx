@@ -1,7 +1,7 @@
 import { json, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { signInUser } from "../api";
-import AuthContext, { ACTION } from "../contexts/AuthContext";
+import AuthContext, { AUTH_ACTION } from "../contexts/AuthContext";
 
 export default function SignIn() {
     const { username, password, token, isSignedIn, dispatch } = useContext(AuthContext);
@@ -14,7 +14,7 @@ export default function SignIn() {
         try {
             //    const userData = await signInUser(username, password);
             const userData = await signInUser(username, password);
-            await dispatch({ type: ACTION.SIGN_IN, payload: userData.token });
+            await dispatch({ type: AUTH_ACTION.SIGN_IN, payload: userData.token });
             await localStorage.setItem("tokenId", userData.token);
             await localStorage.setItem("username", username);
             console.log(userData.token);
@@ -49,21 +49,21 @@ export default function SignIn() {
                         Username:{""}
                         <input
                             value={username}
-                            onChange={(e) => dispatch({ type: ACTION.SET_USERNAME, payload: e.target.value })}
+                            onChange={(e) => dispatch({ type: AUTH_ACTION.SET_USERNAME, payload: e.target.value })}
                         />
                     </label>
                     <label>
                         Password:{""}
                         <input type="password"
                             value={password}
-                            onChange={(e) => dispatch({ type: ACTION.SET_PASSWORD, payload: e.target.value })}
+                            onChange={(e) => dispatch({ type: AUTH_ACTION.SET_PASSWORD, payload: e.target.value })}
                         />
                     </label>
                     <button>Sign In</button>
                 </form>
                 <br></br>
                 <button onClick={()=>{
-                    dispatch({type:ACTION.SIGN_OUT});
+                    dispatch({type:AUTH_ACTION.SIGN_OUT});
                     localStorage.clear();
                 }}>Sign Out</button>
             </div>

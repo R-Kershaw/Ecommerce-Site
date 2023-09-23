@@ -2,7 +2,7 @@ import { createContext, useEffect, useReducer } from "react"
 
 const AuthContext = createContext();
 
-export const ACTION = {
+export const AUTH_ACTION = {
     SET_USERNAME: 'setUsername',
     SET_PASSWORD: 'setPassword',
     SIGN_IN: 'signin',
@@ -12,17 +12,17 @@ export const ACTION = {
 //only manages state, not logic
 export const authReducer = (state, action) => {
     switch (action.type) {
-        case ACTION.SET_USERNAME:
+        case AUTH_ACTION.SET_USERNAME:
             return { ...state, username: action.payload }
-        case ACTION.SET_PASSWORD:
+        case AUTH_ACTION.SET_PASSWORD:
             return { ...state, password: action.payload }
-        case ACTION.SIGN_IN:
+        case AUTH_ACTION.SIGN_IN:
             return {
                 ...state,
                 isSignedIn: true,
                 token: action.payload
             }
-        case ACTION.SIGN_OUT:
+        case AUTH_ACTION.SIGN_OUT:
             return {
                 ...state,
                 username: "",
@@ -44,9 +44,9 @@ export const AuthContextProvider = ({ children }) => {
     useEffect(() => {
         const user = localStorage.getItem("tokenId");
         if (user) {
-            dispatch({ type: ACTION.SIGN_IN, payload: user });
+            dispatch({ type: AUTH_ACTION.SIGN_IN, payload: user });
         }
-    }, [])
+    }, []);
 
     console.log('AuthContext state:', state);
 
