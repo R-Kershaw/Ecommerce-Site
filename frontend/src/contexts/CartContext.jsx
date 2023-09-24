@@ -10,10 +10,13 @@ export const CART_ACTION = {
 }
 
 export const cartReducer = (state, action) => {
-    //gets a reference to the object to directly modify its properties
-    let foundProduct = state.cart.find((product) => {
+    //treat objects as read only in the React State, use a copy to update the objects in state
+    let newCart = [...state.cart];
+    let foundProduct = newCart.find((product) => {
         return product.id === action.payload.id;
     });
+
+    console.log(newCart);
 
     switch (action.type) {
         case CART_ACTION.FETCH_CART:
@@ -23,7 +26,7 @@ export const cartReducer = (state, action) => {
             //update the newly modified product that was found
             if (foundProduct) {
                 foundProduct.quantity += action.payload.quantity;
-                return { ...state, cart: [...state.cart] }
+                return { ...state, cart: [...newCart] }
             }
             //add the new product to the end of the cart since it doesn't exist yet
             else {
@@ -37,7 +40,7 @@ export const cartReducer = (state, action) => {
                 state.totalQuantity += action.payload.quantity;
 
                 foundProduct.quantity = action.payload.quantity;
-                return { ...state, cart: [...state.cart] }
+                return { ...state, cart: [...newCart] }
             }
             else {
                 return { ...state }
@@ -46,7 +49,7 @@ export const cartReducer = (state, action) => {
             if (foundProduct) {
                 state.totalQuantity -= foundProduct.quantity;
             }
-            const filteredOutProducts = state.cart.filter(product => product.id !== action.payload.id);
+            const filteredOutProducts = newCart.filter(product => product.id !== action.payload.id);
             return { ...state, cart: [...filteredOutProducts] }
         default:
             throw Error('Unknown action: ' + action.type);
@@ -71,9 +74,7 @@ export const CartContextProvider = ({ children }) => {
 
     //otherwise load their local cart
     useEffect(() => {
-        console.log("initial state");
-        console.log(state.cart);
-        console.log(state.totalQuantity);
+        //if the local storage is null then initialize it
         let initialState = getLocalStorageState();
         if (!initialState) {
             setLocalStorage();
@@ -82,16 +83,11 @@ export const CartContextProvider = ({ children }) => {
             state.cart = initialState.cart;
             state.totalQuantity = initialState.totalQuantity;
         }
-
-        console.log("initialState: " + initialState);
-
     }, []);
 
     //update the localStorage values after the state has been set to prevent concurrency issues
     useEffect(() => {
         setLocalStorage();
-        console.log("updated local storage");
-        console.log(getLocalStorageState());
     }, [state.cart, state.totalQuantity]); //update localStorage if the state's cart or totalQuantity change
 
     console.log('CartContext state:', state);
