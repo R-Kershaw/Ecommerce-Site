@@ -12,6 +12,7 @@ export const CART_ACTION = {
 export const cartReducer = (state, action) => {
     //treat objects as read only in the React State, use a copy to update the objects in state
     let newCart = [...state.cart];
+    let newQuantity = state.totalQuantity;
     let foundProduct = newCart.find((product) => {
         return product.id === action.payload.id;
     });
@@ -22,35 +23,39 @@ export const cartReducer = (state, action) => {
         case CART_ACTION.FETCH_CART:
             break;
         case CART_ACTION.ADD_PRODUCT: //if a product already exists in the cart then update its quantity property, otherwise add the new product to the end of the cart
-            state.totalQuantity += action.payload.quantity;
+            newQuantity += action.payload.quantity;
             //update the newly modified product that was found
             if (foundProduct) {
                 foundProduct.quantity += action.payload.quantity;
-                return { ...state, cart: [...newCart] }
+                return { ...state, cart: [...newCart], totalQuantity: newQuantity }
             }
             //add the new product to the end of the cart since it doesn't exist yet
             else {
-                return { ...state, cart: [...state.cart, { id: action.payload.id, quantity: action.payload.quantity }] }
+                return { ...state, cart: [...state.cart, { id: action.payload.id, quantity: action.payload.quantity }], totalQuantity: newQuantity }
             }
         case CART_ACTION.EDIT_PRODUCT: //you can only edit products that exist in the cart
 
             if (foundProduct) {
                 //update the totalQuantity with the new product quantity
-                state.totalQuantity -= foundProduct.quantity;
-                state.totalQuantity += action.payload.quantity;
+                newQuantity -= foundProduct.quantity;
+                newQuantity += action.payload.quantity;
 
                 foundProduct.quantity = action.payload.quantity;
-                return { ...state, cart: [...newCart] }
+                return { ...state, cart: [...newCart], totalQuantity: newQuantity }
             }
             else {
                 return { ...state }
             }
         case CART_ACTION.DELETE_PRODUCT:
             if (foundProduct) {
-                state.totalQuantity -= foundProduct.quantity;
+                newQuantity -= foundProduct.quantity;
+                //don't need to use newCart because filter already returns a shallow copy of the array
+                const filteredOutProducts = state.cart.filter(product => product.id !== action.payload.id);
+                return { ...state, cart: [...filteredOutProducts], totalQuantity: newQuantity }
             }
-            const filteredOutProducts = newCart.filter(product => product.id !== action.payload.id);
-            return { ...state, cart: [...filteredOutProducts] }
+            else {
+                return { ...state }
+            }
         default:
             throw Error('Unknown action: ' + action.type);
     }
