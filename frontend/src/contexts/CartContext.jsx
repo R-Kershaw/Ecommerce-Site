@@ -56,10 +56,33 @@ export const cartReducer = (state, action) => {
 export const CartContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, { cart: [], totalQuantity: 0 });
 
+    function setLocalStorage() {
+        localStorage.setItem("state", JSON.stringify(state));
+    }
+    
+    function getLocalStorageState() {
+        return JSON.parse(localStorage.getItem("state"));
+    }
+    
     //if the user is logged in, fetch their saved cart from the server
     useEffect(() => {
 
-    });
+    }, []);
+
+    //otherwise load their local cart
+    useEffect(() => {
+        console.log("initial state");
+        let initialState = getLocalStorageState();
+        state.cart = initialState.cart;
+        state.totalQuantity = initialState.totalQuantity;
+    }, []);
+
+    //update the localStorage values after the state has been set to prevent concurrency issues
+    useEffect(() => {
+        setLocalStorage();
+        console.log("updated local storage");
+        console.log(getLocalStorageState());
+    }, [state.cart, state.totalQuantity]); //update localStorage if the state's cart or totalQuantity change
 
     console.log('CartContext state:', state);
 

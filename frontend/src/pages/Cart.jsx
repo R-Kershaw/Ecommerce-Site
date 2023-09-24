@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import CartContext, { CART_ACTION } from "../contexts/CartContext"
 import { useNavigate } from "react-router-dom";
 import { addCartItem } from "../api";
@@ -7,12 +7,19 @@ export default function Cart() {
     const { cart, totalQuantity, dispatch } = useContext(CartContext);
     const navigate = useNavigate();
 
-    async function fetchCart() {
-        try {
+    function getLocalStorageState() {
+        console.log(JSON.parse(localStorage.getItem("state")));
+        return JSON.parse(localStorage.getItem("state"));
+    }
 
-        } catch (error) {
-            console.log(error);
-        }
+    function getLocalStorageCart() {
+        console.log(JSON.parse(localStorage.getItem("state")).cart);
+        return JSON.parse(localStorage.getItem("state")).cart;
+    }
+
+    function getLocalStorageTotalQuantity() {
+        console.log(JSON.parse(localStorage.getItem("state")).totalQuantity);
+        return JSON.parse(localStorage.getItem("state")).totalQuantity;
     }
 
     async function addProduct(productId, productQuantity) {
@@ -24,6 +31,7 @@ export default function Cart() {
             console.log(productId, productQuantity);
             dispatch({ type: CART_ACTION.ADD_PRODUCT, payload: { id: productId, quantity: productQuantity } });
             console.log('Cart Page state:', cart);
+
         } catch (error) {
             console.log(error);
         }
@@ -34,6 +42,7 @@ export default function Cart() {
             console.log(productId, productQuantity);
             dispatch({ type: CART_ACTION.EDIT_PRODUCT, payload: { id: productId, quantity: productQuantity } });
             console.log('Cart Page state:', cart);
+
         } catch (error) {
             console.log(error);
         }
@@ -52,6 +61,8 @@ export default function Cart() {
         try {
             console.log('cart quantity: ' + totalQuantity);
             console.log('Cart Page state:', cart);
+            console.log("local storage cart: " + getLocalStorageCartState());
+            console.log("local storage quantity: " + getLocalStorageCartQuantity());
         } catch (error) {
             console.log(error);
         }
@@ -73,7 +84,7 @@ export default function Cart() {
             <br></br>
             <button onClick={() => deleteProduct(99)}>Remove product id 99</button>
             <br></br>
-            <button onClick={() => getCartQuantity()}>Get cart quantity</button>
+            <button onClick={() => getLocalStorageTotalQuantity()}>Get cart quantity</button>
 
         </>
     )
