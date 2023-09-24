@@ -61,8 +61,8 @@ export default function Cart() {
         try {
             console.log('cart quantity: ' + totalQuantity);
             console.log('Cart Page state:', cart);
-            console.log("local storage cart: " + getLocalStorageCartState());
-            console.log("local storage quantity: " + getLocalStorageCartQuantity());
+            console.log("local storage cart: " + getLocalStorageCart());
+            console.log("local storage quantity: " + getLocalStorageTotalQuantity());
         } catch (error) {
             console.log(error);
         }
@@ -84,7 +84,9 @@ export default function Cart() {
             <br></br>
             <button onClick={() => deleteProduct(99)}>Remove product id 99</button>
             <br></br>
-            <button onClick={() => getLocalStorageTotalQuantity()}>Get cart quantity</button>
+            <button onClick={() => getLocalStorageState()}>Get local storage state</button>
+            <br></br>
+            <button onClick={() => localStorage.clear()}>Clear local storage</button>
 
         </>
     )

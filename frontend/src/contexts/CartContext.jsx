@@ -59,11 +59,11 @@ export const CartContextProvider = ({ children }) => {
     function setLocalStorage() {
         localStorage.setItem("state", JSON.stringify(state));
     }
-    
+
     function getLocalStorageState() {
         return JSON.parse(localStorage.getItem("state"));
     }
-    
+
     //if the user is logged in, fetch their saved cart from the server
     useEffect(() => {
 
@@ -72,9 +72,19 @@ export const CartContextProvider = ({ children }) => {
     //otherwise load their local cart
     useEffect(() => {
         console.log("initial state");
+        console.log(state.cart);
+        console.log(state.totalQuantity);
         let initialState = getLocalStorageState();
-        state.cart = initialState.cart;
-        state.totalQuantity = initialState.totalQuantity;
+        if (!initialState) {
+            setLocalStorage();
+            initialState = getLocalStorageState();
+        } else {
+            state.cart = initialState.cart;
+            state.totalQuantity = initialState.totalQuantity;
+        }
+
+        console.log("initialState: " + initialState);
+
     }, []);
 
     //update the localStorage values after the state has been set to prevent concurrency issues
