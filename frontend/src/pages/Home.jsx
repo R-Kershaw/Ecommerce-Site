@@ -118,7 +118,7 @@ export default function Home() {
                 Home Page
             </h1>
             <br></br>
-            <div>
+            <div >
                 <button onClick={() => showProductsInCategory('electronics')}>Electronics</button>
                 {/*   
                 <button onClick={() => sortProductsByType(SORT_TYPE.PRICE_ASCENDING)}>Price Ascending</button>
@@ -131,13 +131,15 @@ export default function Home() {
                 <button onClick={() => filterProductsByType(FILTER_TYPE.PRICE, 0, 25)}>Filter By Price</button>
                 <button onClick={() => filterProductsByType(FILTER_TYPE.RATING, 4, 5)}>Filter By Rating</button>
                 <button onClick={() => filterProductsByType(FILTER_TYPE.REVIEWS, 100, 300)}>Filter By Reviews</button>
-                {allProducts.map(product => (
-                    <ProductCard 
-                    key={product.id} 
-                    product={product} 
-                    onClick={()=>navigate(`/productDetails/${product.id}`)}
-                    />
-                ))}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-4">
+                    {allProducts.map(product => (
+                        <ProductCard
+                            key={product.id}
+                            product={product}
+                            onClick={() => navigate(`/productDetails/${product.id}`)}
+                        />
+                    ))}
+                </div>
             </div>
         </>
     )
