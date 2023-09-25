@@ -6,13 +6,14 @@ export const CART_ACTION = {
     FETCH_CART: "fetchCart", //fetching user's cart from the server
     ADD_PRODUCT: "addProduct",
     EDIT_PRODUCT: "editProduct",
-    DELETE_PRODUCT: "deleteProduct"
+    DELETE_PRODUCT: "deleteProduct",
+    DELETE_CART: "deleteCart"
 }
 
 export const cartReducer = (state, action) => {
     //treat objects as read only in the React State, use a copy to update the objects in state
     let newCart = [...state.cart];
-    let newQuantity = state.totalQuantity;
+    let newQuantity = parseInt(state.totalQuantity);
     let foundProduct = newCart.find((product) => {
         return product.id === action.payload.id;
     });
@@ -56,6 +57,8 @@ export const cartReducer = (state, action) => {
             else {
                 return { ...state }
             }
+        case CART_ACTION.DELETE_CART:
+            return { ...state, cart: [], totalQuantity: 0 }
         default:
             throw Error('Unknown action: ' + action.type);
     }

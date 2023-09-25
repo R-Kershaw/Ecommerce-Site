@@ -1,5 +1,5 @@
-import { useContext, useEffect } from "react"
-import CartContext, { CART_ACTION } from "../contexts/CartContext"
+import { useContext } from "react";
+import CartContext, { CART_ACTION } from "../contexts/CartContext";
 import { useNavigate } from "react-router-dom";
 import { addCartItem } from "../api";
 
@@ -57,6 +57,15 @@ export default function Cart() {
         }
     }
 
+    async function deleteCart(productId){
+        try {
+            dispatch({ type: CART_ACTION.DELETE_CART, payload: {id:productId}});
+            console.log('Cart Page state:', cart);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async function getCartQuantity() {
         try {
             console.log('cart quantity: ' + totalQuantity);
@@ -87,7 +96,8 @@ export default function Cart() {
             <button onClick={() => getLocalStorageState()}>Get local storage state</button>
             <br></br>
             <button onClick={() => localStorage.clear()}>Clear local storage</button>
-
+            <br></br>
+            <button onClick={() => deleteCart(-1)}>Empty Cart</button>
         </>
     )
 }
