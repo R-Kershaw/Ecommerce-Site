@@ -8,6 +8,7 @@ export default function Home() {
     const [allProducts, setAllProducts] = useState([]);
     const [singleProduct, setSingleProduct] = useState(null);
     const [allCategories, setAllCategories] = useState([]);
+    const [singleCategory, setSingleCategory] = useState('all');
     const [productsInCategory, setProductsInCategory] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -131,7 +132,19 @@ export default function Home() {
                 <button onClick={() => filterProductsByType(FILTER_TYPE.PRICE, 0, 25)}>Filter By Price</button>
                 <button onClick={() => filterProductsByType(FILTER_TYPE.RATING, 4, 5)}>Filter By Rating</button>
                 <button onClick={() => filterProductsByType(FILTER_TYPE.REVIEWS, 100, 300)}>Filter By Reviews</button>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-4">
+                <div className="grid grid-cols-5 gap-x-2 gap-y-4">
+
+                    <select className="capitalize border bg-trf-50  font-bold py-2 px-4 rounded" 
+                    onChange={(e) => showProductsInCategory(e.target.value)}>
+                        <option value="all"> categories: all</option>
+                        {allCategories.map((category) =>
+                            <option value={category}>
+                                {category}
+                            </option>)}
+                    </select>
+                </div>
+
+                <div className="my-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-4">
                     {allProducts.map(product => (
                         <ProductCard
                             key={product.id}

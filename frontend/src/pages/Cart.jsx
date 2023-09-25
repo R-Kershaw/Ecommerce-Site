@@ -7,6 +7,7 @@ import ProductCard from "../components/ProductCard";
 export default function Cart() {
     const { cart, totalQuantity, dispatch } = useContext(CartContext);
     const [localCart, setLocalCart] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,19 +22,29 @@ export default function Cart() {
             }))
 
             setLocalCart(tempCart);
+            setLoading(false);
         }
         fetchData();
-    }, [localCart])
+    }, [])
 
+    if (loading) {
+        return (
+            <div>
+                <h1>Loading...</h1>
+            </div>
+        );
+    }
     function getLocalStorageState() {
         console.log(JSON.parse(localStorage.getItem("state")));
-        return JSON.parse(localStorage.getItem("state"));
+        const tempState = JSON.parse(localStorage.getItem("state"));
+        return tempState;
     }
 
     function getLocalStorageCart() {
         console.log(localCart);
         console.log(JSON.parse(localStorage.getItem("state")).cart);
-        return JSON.parse(localStorage.getItem("state")).cart;
+        const tempCart = JSON.parse(localStorage.getItem("state")).cart;
+        return tempCart;
     }
 
     function getLocalStorageTotalQuantity() {
@@ -70,6 +81,18 @@ export default function Cart() {
     async function deleteProduct(productId) {
         try {
             dispatch({ type: CART_ACTION.DELETE_PRODUCT, payload: { id: productId } });
+
+            /*
+            //update the state of the localCart to re-render
+            let newCart = [...localCart];
+            let foundProduct = newCart.find((product) => {
+                return product.id === productId;
+            });
+            if (foundProduct) {
+                const filteredOutProducts = newCart.filter(product => product.id !== productId);
+                setLocalCart([...filteredOutProducts]);
+            }
+            */
             console.log('Cart Page state:', cart);
         } catch (error) {
             console.log(error);
@@ -126,7 +149,7 @@ export default function Cart() {
                         onClick={() => navigate(`/productDetails/${product.id}`)}
                     />
                 ))}
-                
+
             </div>
             <br></br>
         </>
