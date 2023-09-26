@@ -5,15 +5,23 @@ import { getSingleProduct } from "../api";
 import CartItem from "../components/CartItem";
 
 export default function Cart() {
-    const { cart, totalQuantity, dispatch } = useContext(CartContext);
-    const [localCart, setLocalCart] = useState([]);
+    const { totalQuantity, dispatch } = useContext(CartContext);
+    const [checkOutCart, setCheckOutCart] = useState([]);
+    const [checkOutTotalPrice, setCheckOutTotalPrice] = useState(0);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
-        let initialCart = getLocalStorageCart();
         async function fetchData() {
-            setLocalCart([...initialCart]);
+            let initialCart = getLocalStorageCart();
+
+            //create a new array of products with their quantities. Wait for all the data to load before setting checkOutCart
+            const tempCart = await Promise.all(initialCart.map(async product => {
+                let tempProduct = await getSingleProduct(product.id);
+                return { 'product': tempProduct, 'quantity': product.quantity };
+            }));
+            
+            setCheckOutCart(tempCart);
             setLoading(false);
         }
         fetchData();
@@ -28,7 +36,6 @@ export default function Cart() {
     }
 
     function getLocalStorageCart() {
-        console.log(localCart);
         console.log(JSON.parse(localStorage.getItem("state")).cart);
         const tempCart = JSON.parse(localStorage.getItem("state")).cart;
         return tempCart;
@@ -45,21 +52,28 @@ export default function Cart() {
         return JSON.parse(localStorage.getItem("state")).totalQuantity;
     }
 
+    function findProductbyId(cart, productId) {
+        for (const cartItem of cart) {
+            if (cartItem.product.id === productId) {
+                return cartItem.product;
+            }
+        }
+    }
+
     async function editProduct(productId, productQuantity) {
         try {
             //update the client's cart
             console.log(productId, productQuantity);
             dispatch({ type: CART_ACTION.EDIT_PRODUCT, payload: { id: productId, quantity: parseInt(productQuantity) } });
 
-            //update the state of the localCart to re-render
-            let newCart = [...localCart];
-            let foundProduct = newCart.find((product) => {
-                return product.id === productId;
-            });
+            let newCart = [...checkOutCart];
+            let foundProduct = findProductbyId(newCart, productId);
+            console.log(foundProduct);
 
             if (foundProduct) {
+                console.log('found product: ' + foundProduct.id);
                 foundProduct.quantity = productQuantity;
-                setLocalCart([...newCart]);
+                setCheckOutCart([...newCart]);
             }
         } catch (error) {
             console.log(error);
@@ -70,15 +84,12 @@ export default function Cart() {
         try {
             dispatch({ type: CART_ACTION.DELETE_PRODUCT, payload: { id: productId } });
 
-            //update the state of the localCart to re-render
-            let newCart = [...localCart];
-            let foundProduct = newCart.find((product) => {
-                return product.id === productId;
-            });
+            let newCart = [...checkOutCart];
+            let foundProduct = findProductbyId(newCart, productId);
 
             if (foundProduct) {
-                const filteredOutProducts = newCart.filter(product => product.id !== productId);
-                setLocalCart([...filteredOutProducts]);
+                const filteredOutProducts = newCart.filter(cartItem => cartItem.product.id !== productId);
+                setCheckOutCart([...filteredOutProducts]);
             }
         } catch (error) {
             console.log(error);
@@ -88,15 +99,14 @@ export default function Cart() {
     async function deleteCart(productId) {
         try {
             dispatch({ type: CART_ACTION.DELETE_CART, payload: { id: productId } });
+            setCheckOutCart([]);
         } catch (error) {
             console.log(error);
         }
     }
 
-    function calculateTotal(){
-        let tempCart = [...localCart.price];
-        let total = 0;
-        console.log(tempCart);
+    function calculateTotal(cart) {
+        return parseFloat(cart.reduce((sum, cartItem) => sum + (cartItem.product.price * cartItem.quantity), 0)).toFixed(2);
     }
 
     return (
@@ -111,15 +121,15 @@ export default function Cart() {
                 </div>
                 <div className="grid grid-cols-3 gap-x-2 gap-y-4">
                     <div className="grid col-span-2">
-                        {localCart.map(product => (
+                        {checkOutCart.map(cartItem => (
                             //pass down edit and delete functions to children
-                            <CartItem key={product.id} productId={product.id} quantity={product.quantity} editProduct={editProduct} deleteProduct={deleteProduct} />
+                            <CartItem key={cartItem.product.id} product={cartItem.product} quantity={cartItem.quantity} editProduct={editProduct} deleteProduct={deleteProduct} />
                         ))}
                     </div>
-                    <div className="my-2 inline-block col-span-1 capitalize border bg-trf-50  font-bold py-2 px-2 rounded w-full">
-                        <p className="">{`SubTotal: (${totalQuantity})`}</p>
+                    <div className="my-2 inline-block col-span-1 capitalize border bg-trf-50  shadow-md font-bold py-2 px-2 rounded w-full">
+                        <p className="">{`SubTotal: (${checkOutTotalPrice})`}</p>
                         <hr></hr>
-                        
+                        <p className="">{`Item Count: (${totalQuantity})`}</p>
                     </div>
                 </div>
             </div>
