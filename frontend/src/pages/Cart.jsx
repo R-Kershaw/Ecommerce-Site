@@ -20,7 +20,10 @@ export default function Cart() {
                 let tempProduct = await getSingleProduct(product.id);
                 return { 'product': tempProduct, 'quantity': product.quantity };
             }));
-            
+
+            let tempTotal = await calculateTotal(tempCart);
+            setCheckOutTotalPrice(tempTotal);
+
             setCheckOutCart(tempCart);
             setLoading(false);
         }
@@ -73,7 +76,10 @@ export default function Cart() {
             if (foundProduct) {
                 console.log('found product: ' + foundProduct.id);
                 foundProduct.quantity = productQuantity;
+                console.log(newCart);
                 setCheckOutCart([...newCart]);
+
+                let tempPrice = await calculateTotal(checkOutCart);
             }
         } catch (error) {
             console.log(error);
@@ -105,8 +111,13 @@ export default function Cart() {
         }
     }
 
-    function calculateTotal(cart) {
-        return parseFloat(cart.reduce((sum, cartItem) => sum + (cartItem.product.price * cartItem.quantity), 0)).toFixed(2);
+    async function calculateTotal(cart) {
+        try {
+            let tempCart = [...cart];
+            return parseFloat(tempCart.reduce((sum, cartItem) => sum + (cartItem.product.price * cartItem.quantity), 0)).toFixed(2);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
