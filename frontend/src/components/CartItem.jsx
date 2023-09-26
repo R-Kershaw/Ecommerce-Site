@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getSingleProduct } from "../api";
 import star from '../assets/icons8-rating-64.png';
 import CartContext, { CART_ACTION } from "../contexts/CartContext";
 
 export default function CartItem({ productId, quantity, editProduct, deleteProduct }) {
+    const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const [productQuantity, setProductQuantity] = useState(0);
     const { dispatch } = useContext(CartContext);
@@ -30,7 +32,8 @@ export default function CartItem({ productId, quantity, editProduct, deleteProdu
     }
 
     return (
-        <div className="grid grid-cols-6 border bg-trf-50 rounded-lg my-2 ">
+        <div className="grid grid-cols-6 border bg-trf-50 rounded-lg my-2 shadow-md overflow-hidden relative hover:shadow-lg cursor-pointer"
+            onClick={() => navigate(`/productDetails/${product.id}`)}>
             <div className="bg-white flex">
                 <img className="w-56 object-contain" src={product.image} />
             </div>
@@ -42,8 +45,8 @@ export default function CartItem({ productId, quantity, editProduct, deleteProdu
                     <span className="-mx-1">{parseFloat(product.rating.rate).toFixed(2)}</span>
                 </div>
                 <p className="font-bold m-2">${parseFloat(product.price).toFixed(2)}</p>
-                <div className="m-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-4">
-                    <select className="w-52 col-span-2 border border-trf-950 shadow-md overflow-hidden relative hover:shadow-lg cursor-pointer" value={productQuantity}
+                <div className="m-2 grid grid-cols-3 gap-x-2 gap-y-4">
+                    <select className="w-20 sm:w-28 md:w-36 col-span-2 border border-trf-950 shadow-md overflow-hidden relative hover:shadow-lg cursor-pointer" value={productQuantity}
                         onChange={(e) => {
                             editProduct(product.id, e.target.value)
                             setProductQuantity(e.target.value)
@@ -54,7 +57,7 @@ export default function CartItem({ productId, quantity, editProduct, deleteProdu
                         <option value="4">4</option>
                         <option value="5">5</option>
                     </select>
-                    <button className="w-26px-5 py-2.5 font-medium bg-trf-200 hover:bg-trf-300 hover:text-trf-600 text-trf-950 rounded-lg text-sm"
+                    <button className="w-16 sm:w-24 md:w-28 px-2 py-2.5 bg-trf-200 hover:bg-trf-300 hover:text-trf-600 text-trf-950 rounded-lg text-md"
                         onClick={() => deleteProduct(product.id)}>Delete</button>
                 </div>
             </div>

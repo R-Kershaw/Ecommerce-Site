@@ -1,11 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import star from '../assets/icons8-rating-64.png';
 
 //needs a picture, title, and price, and onClick function
 //"https://img.icons8.com/cotton/64/rating.png
-export default function ProductCard({ product, onClick }) {
+export default function ProductCard({ product }) {
+    const navigate = useNavigate();
     const { title, image, price, rating } = product;
     return (
-        <div className="rounded-lg my-2 w-56 border bg-trf-50  shadow-md overflow-hidden relative hover:shadow-lg cursor-pointer" onClick={onClick}>
+        <div className="rounded-lg my-2 w-56 border bg-trf-50  shadow-md overflow-hidden relative hover:shadow-lg cursor-pointer"
+            onClick={() => navigate(`/productDetails/${product.id}`)}>
             <img className="h-40 sm:h-48 w-full object-fill" src={image} />
             <h1 className="font-bold m-2">{title}</h1>
             <div className="grid grid-cols-8  justify-start">

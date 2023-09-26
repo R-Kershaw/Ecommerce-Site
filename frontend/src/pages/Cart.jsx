@@ -93,6 +93,12 @@ export default function Cart() {
         }
     }
 
+    function calculateTotal(){
+        let tempCart = [...localCart.price];
+        let total = 0;
+        console.log(tempCart);
+    }
+
     return (
         <>
             <h1>
@@ -100,7 +106,7 @@ export default function Cart() {
             </h1>
             <br></br>
             <div className="m-2">
-                <div className="capitalize border bg-trf-50  font-bold py-2 px-2 rounded w-full">
+                <div className="capitalize border bg-trf-50  font-bold py-2 px-2 rounded w-full shadow-md">
                     <h1 className="m-2">Shopping Cart</h1>
                 </div>
                 <div className="grid grid-cols-3 gap-x-2 gap-y-4">
@@ -110,8 +116,10 @@ export default function Cart() {
                             <CartItem key={product.id} productId={product.id} quantity={product.quantity} editProduct={editProduct} deleteProduct={deleteProduct} />
                         ))}
                     </div>
-                    <div className="my-2 grid col-span-1 capitalize border bg-trf-50  font-bold py-2 px-2 rounded w-full">
-                        <h3 className="">{`SubTotal (${totalQuantity} items)`}</h3>
+                    <div className="my-2 inline-block col-span-1 capitalize border bg-trf-50  shadow-md font-bold py-2 px-2 rounded w-full">
+                        <p className="">{`SubTotal: (${totalQuantity})`}</p>
+                        <hr></hr>
+                        
                     </div>
                 </div>
             </div>
