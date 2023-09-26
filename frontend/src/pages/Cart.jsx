@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import CartContext, { CART_ACTION } from "../contexts/CartContext";
 import { useNavigate } from "react-router-dom";
 import { getSingleProduct } from "../api";
-import ProductCard from "../components/ProductCard";
 import CartItem from "../components/CartItem";
 
 export default function Cart() {
@@ -17,16 +16,16 @@ export default function Cart() {
         async function fetchData() {
 
             //create a new temporary array of all the saved values. Wait for all the data to load before setting localCart
-            const tempCart = await Promise.all(initialCart.map(async product => {
-                let tempProduct = await getSingleProduct(product.id);
-                return tempProduct;
-            }))
+            /*   const tempCart = await Promise.all(initialCart.map(async product => {
+                   let tempProduct = await getSingleProduct(product.id);
+                   return tempProduct;
+               }))*/
 
-            setLocalCart(tempCart);
+            setLocalCart([...initialCart]);
             setLoading(false);
         }
         fetchData();
-    }, [])
+    }, []);
 
     if (loading) {
         return (
@@ -60,7 +59,7 @@ export default function Cart() {
 
             //update the client's cart
             console.log(productId, productQuantity);
-            dispatch({ type: CART_ACTION.ADD_PRODUCT, payload: { id: productId, quantity: productQuantity } });
+            dispatch({ type: CART_ACTION.ADD_PRODUCT, payload: { id: productId, quantity: parseInt(productQuantity) } });
             console.log('Cart Page state:', cart);
 
         } catch (error) {
@@ -71,7 +70,7 @@ export default function Cart() {
         try {
             //update the client's cart
             console.log(productId, productQuantity);
-            dispatch({ type: CART_ACTION.EDIT_PRODUCT, payload: { id: productId, quantity: productQuantity } });
+            dispatch({ type: CART_ACTION.EDIT_PRODUCT, payload: { id: productId, quantity: parseInt(productQuantity) } });
             console.log('Cart Page state:', cart);
 
         } catch (error) {
@@ -83,17 +82,16 @@ export default function Cart() {
         try {
             dispatch({ type: CART_ACTION.DELETE_PRODUCT, payload: { id: productId } });
 
-            /*
             //update the state of the localCart to re-render
             let newCart = [...localCart];
             let foundProduct = newCart.find((product) => {
                 return product.id === productId;
             });
+
             if (foundProduct) {
                 const filteredOutProducts = newCart.filter(product => product.id !== productId);
                 setLocalCart([...filteredOutProducts]);
             }
-            */
             console.log('Cart Page state:', cart);
         } catch (error) {
             console.log(error);
@@ -142,17 +140,11 @@ export default function Cart() {
             <br></br>
             <button onClick={() => deleteCart(-1)}>Empty Cart</button>
             <br></br>
-            <div className="flex flex-col gap-x-2 gap-y-4">
+            <div className="grid grid-cols-1 gap-x-2 gap-y-4">
                 {localCart.map(product => (
-                /*    <ProductCard
-                        key={product.id}
-                        product={product}
-                        onClick={() => navigate(`/productDetails/${product.id}`)}
-                    />
-                    */
-                    <CartItem key={product.id} productId={product.id} quantity={1}/>
+                    //pass down edit and delete functions to children
+                    <CartItem key={product.id} productId={product.id} quantity={product.quantity} editProduct={editProduct} deleteProduct={deleteProduct} />
                 ))}
-
             </div>
             <br></br>
         </>

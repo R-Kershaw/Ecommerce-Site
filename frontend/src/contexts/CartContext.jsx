@@ -28,6 +28,14 @@ export const cartReducer = (state, action) => {
             //update the newly modified product that was found
             if (foundProduct) {
                 foundProduct.quantity += action.payload.quantity;
+
+                //keep the product quantity within the max limit
+                let maxLimit = 5;
+                if (foundProduct.quantity > maxLimit) {
+                    let difference = foundProduct.quantity - maxLimit;
+                    newQuantity -= difference;
+                    foundProduct.quantity = 5;
+                }
                 return { ...state, cart: [...newCart], totalQuantity: newQuantity }
             }
             //add the new product to the end of the cart since it doesn't exist yet

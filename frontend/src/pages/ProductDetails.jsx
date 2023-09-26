@@ -37,9 +37,6 @@ export default function ProductDetails() {
         fetchData();
     }, []);
 
-    //   console.log(PRODUCT_ID);
-    //    console.log(singleProduct);
-
     if (loading) {
         return (
             <div>
