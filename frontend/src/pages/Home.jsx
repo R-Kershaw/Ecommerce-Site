@@ -132,11 +132,11 @@ export default function Home() {
                 <button onClick={() => filterProductsByType(FILTER_TYPE.PRICE, 0, 25)}>Filter By Price</button>
                 <button onClick={() => filterProductsByType(FILTER_TYPE.RATING, 4, 5)}>Filter By Rating</button>
                 <button onClick={() => filterProductsByType(FILTER_TYPE.REVIEWS, 100, 300)}>Filter By Reviews</button>
-                <div className="grid grid-cols-5 gap-x-2 gap-y-4">
+                <div className="grid grid-cols-9 gap-x-2 gap-y-4">
 
-                    <select className="capitalize border bg-trf-50  font-bold py-2 px-4 rounded" 
+                    <select className="col-span-3 capitalize border bg-trf-50 m-2 font-bold py-2 px-2 rounded" 
                     onChange={(e) => showProductsInCategory(e.target.value)}>
-                        <option value="all"> categories: all</option>
+                        <option value="all"> category: all</option>
                         {allCategories.map((category) =>
                             <option value={category}>
                                 {category}

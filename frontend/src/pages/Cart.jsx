@@ -3,6 +3,7 @@ import CartContext, { CART_ACTION } from "../contexts/CartContext";
 import { useNavigate } from "react-router-dom";
 import { getSingleProduct } from "../api";
 import ProductCard from "../components/ProductCard";
+import CartItem from "../components/CartItem";
 
 export default function Cart() {
     const { cart, totalQuantity, dispatch } = useContext(CartContext);
@@ -141,13 +142,15 @@ export default function Cart() {
             <br></br>
             <button onClick={() => deleteCart(-1)}>Empty Cart</button>
             <br></br>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-4">
+            <div className="flex flex-col gap-x-2 gap-y-4">
                 {localCart.map(product => (
-                    <ProductCard
+                /*    <ProductCard
                         key={product.id}
                         product={product}
                         onClick={() => navigate(`/productDetails/${product.id}`)}
                     />
+                    */
+                    <CartItem key={product.id} productId={product.id} quantity={1}/>
                 ))}
 
             </div>
