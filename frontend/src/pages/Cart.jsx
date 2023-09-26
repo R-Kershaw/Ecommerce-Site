@@ -116,7 +116,7 @@ export default function Cart() {
                             <CartItem key={product.id} productId={product.id} quantity={product.quantity} editProduct={editProduct} deleteProduct={deleteProduct} />
                         ))}
                     </div>
-                    <div className="my-2 inline-block col-span-1 capitalize border bg-trf-50  shadow-md font-bold py-2 px-2 rounded w-full">
+                    <div className="my-2 inline-block col-span-1 capitalize border bg-trf-50  font-bold py-2 px-2 rounded w-full">
                         <p className="">{`SubTotal: (${totalQuantity})`}</p>
                         <hr></hr>
                         

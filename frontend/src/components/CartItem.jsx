@@ -32,17 +32,16 @@ export default function CartItem({ productId, quantity, editProduct, deleteProdu
     }
 
     return (
-        <div className="grid grid-cols-6 border bg-trf-50 rounded-lg my-2 shadow-md overflow-hidden relative hover:shadow-lg cursor-pointer"
-            onClick={() => navigate(`/productDetails/${product.id}`)}>
-            <div className="bg-white flex">
-                <img className="w-56 object-contain" src={product.image} />
+        <div className="grid grid-cols-6 border bg-trf-50 rounded-lg my-2 shadow-md overflow-hidden relative hover:shadow-lg">
+            <div className="bg-white flex cursor-pointer">
+                <img className="w-56 object-contain" src={product.image} onClick={() => navigate(`/productDetails/${product.id}`)}/>
             </div>
 
             <div className="m-2 col-span-3 flex-row">
-                <h1 className="font-bold m-2">{product.title}</h1>
-                <div className="-m-1 grid grid-cols-12">
+                <h1 className="font-bold m-2 cursor-pointer" onClick={() => navigate(`/productDetails/${product.id}`)}>{product.title}</h1>
+                <div className="m-1 grid grid-cols-12">
                     <img className="w-5 h-5 inline-block" src={star} alt="rating" />
-                    <span className="-mx-1">{parseFloat(product.rating.rate).toFixed(2)}</span>
+                    <span className="">{parseFloat(product.rating.rate).toFixed(2)}</span>
                 </div>
                 <p className="font-bold m-2">${parseFloat(product.price).toFixed(2)}</p>
                 <div className="m-2 grid grid-cols-3 gap-x-2 gap-y-4">
