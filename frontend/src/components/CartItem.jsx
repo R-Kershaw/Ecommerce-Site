@@ -30,7 +30,7 @@ export default function CartItem({ productId, quantity, editProduct, deleteProdu
     }
 
     return (
-        <div className="grid grid-cols-6 border bg-trf-50 rounded-lg ">
+        <div className="grid grid-cols-6 border bg-trf-50 rounded-lg my-2 ">
             <div className="bg-white flex">
                 <img className="w-56 object-contain" src={product.image} />
             </div>

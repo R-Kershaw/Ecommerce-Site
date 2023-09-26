@@ -11,16 +11,8 @@ export default function Cart() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(JSON.parse(localStorage.getItem("state")));
         let initialCart = getLocalStorageCart();
         async function fetchData() {
-
-            //create a new temporary array of all the saved values. Wait for all the data to load before setting localCart
-            /*   const tempCart = await Promise.all(initialCart.map(async product => {
-                   let tempProduct = await getSingleProduct(product.id);
-                   return tempProduct;
-               }))*/
-
             setLocalCart([...initialCart]);
             setLoading(false);
         }
@@ -34,11 +26,6 @@ export default function Cart() {
             </div>
         );
     }
-    function getLocalStorageState() {
-        console.log(JSON.parse(localStorage.getItem("state")));
-        const tempState = JSON.parse(localStorage.getItem("state"));
-        return tempState;
-    }
 
     function getLocalStorageCart() {
         console.log(localCart);
@@ -46,33 +33,34 @@ export default function Cart() {
         const tempCart = JSON.parse(localStorage.getItem("state")).cart;
         return tempCart;
     }
+    //debug methods
+    function getLocalStorageState() {
+        console.log(JSON.parse(localStorage.getItem("state")));
+        const tempState = JSON.parse(localStorage.getItem("state"));
+        return tempState;
+    }
 
     function getLocalStorageTotalQuantity() {
         console.log(JSON.parse(localStorage.getItem("state")).totalQuantity);
         return JSON.parse(localStorage.getItem("state")).totalQuantity;
     }
 
-    async function addProduct(productId, productQuantity) {
-        try {
-            //update the server's cart 
-            //    await addCartItem(id);
-
-            //update the client's cart
-            console.log(productId, productQuantity);
-            dispatch({ type: CART_ACTION.ADD_PRODUCT, payload: { id: productId, quantity: parseInt(productQuantity) } });
-            console.log('Cart Page state:', cart);
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
     async function editProduct(productId, productQuantity) {
         try {
             //update the client's cart
             console.log(productId, productQuantity);
             dispatch({ type: CART_ACTION.EDIT_PRODUCT, payload: { id: productId, quantity: parseInt(productQuantity) } });
-            console.log('Cart Page state:', cart);
 
+            //update the state of the localCart to re-render
+            let newCart = [...localCart];
+            let foundProduct = newCart.find((product) => {
+                return product.id === productId;
+            });
+
+            if (foundProduct) {
+                foundProduct.quantity = productQuantity;
+                setLocalCart([...newCart]);
+            }
         } catch (error) {
             console.log(error);
         }
@@ -92,7 +80,6 @@ export default function Cart() {
                 const filteredOutProducts = newCart.filter(product => product.id !== productId);
                 setLocalCart([...filteredOutProducts]);
             }
-            console.log('Cart Page state:', cart);
         } catch (error) {
             console.log(error);
         }
@@ -101,18 +88,6 @@ export default function Cart() {
     async function deleteCart(productId) {
         try {
             dispatch({ type: CART_ACTION.DELETE_CART, payload: { id: productId } });
-            console.log('Cart Page state:', cart);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async function getCartQuantity() {
-        try {
-            console.log('cart quantity: ' + totalQuantity);
-            console.log('Cart Page state:', cart);
-            console.log("local storage cart: " + getLocalStorageCart());
-            console.log("local storage quantity: " + getLocalStorageTotalQuantity());
         } catch (error) {
             console.log(error);
         }
@@ -124,27 +99,21 @@ export default function Cart() {
                 Cart Page
             </h1>
             <br></br>
-            <button onClick={() => addProduct(2, 1)}>Add To Cart id 2</button>
-            <br></br>
-            <button onClick={() => addProduct(99, 1)}>Add To Cart id 99</button>
-            <br></br>
-            <button onClick={() => editProduct(2, 2)}>Edit Cart id 2</button>
-            <br></br>
-            <button onClick={() => deleteProduct(2)}>Remove product id 2</button>
-            <br></br>
-            <button onClick={() => deleteProduct(99)}>Remove product id 99</button>
-            <br></br>
-            <button onClick={() => getLocalStorageCart()}>Get local storage state</button>
-            <br></br>
-            <button onClick={() => localStorage.clear()}>Clear local storage</button>
-            <br></br>
-            <button onClick={() => deleteCart(-1)}>Empty Cart</button>
-            <br></br>
-            <div className="grid grid-cols-1 gap-x-2 gap-y-4">
-                {localCart.map(product => (
-                    //pass down edit and delete functions to children
-                    <CartItem key={product.id} productId={product.id} quantity={product.quantity} editProduct={editProduct} deleteProduct={deleteProduct} />
-                ))}
+            <div className="m-2">
+                <div className="capitalize border bg-trf-50  font-bold py-2 px-2 rounded w-full">
+                    <h1 className="m-2">Shopping Cart</h1>
+                </div>
+                <div className="grid grid-cols-3 gap-x-2 gap-y-4">
+                    <div className="grid col-span-2">
+                        {localCart.map(product => (
+                            //pass down edit and delete functions to children
+                            <CartItem key={product.id} productId={product.id} quantity={product.quantity} editProduct={editProduct} deleteProduct={deleteProduct} />
+                        ))}
+                    </div>
+                    <div className="my-2 grid col-span-1 capitalize border bg-trf-50  font-bold py-2 px-2 rounded w-full">
+                        <h3 className="">{`SubTotal (${totalQuantity} items)`}</h3>
+                    </div>
+                </div>
             </div>
             <br></br>
         </>
