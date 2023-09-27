@@ -1,15 +1,10 @@
-import { getAllCategories, getAllProducts, getProductsInCategory, getSingleProduct } from "../api";
+import { getAllCategories, getAllProducts, getProductsInCategory } from "../api";
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
-import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-    const navigate = useNavigate();
     const [allProducts, setAllProducts] = useState([]);
-    const [singleProduct, setSingleProduct] = useState(null);
     const [allCategories, setAllCategories] = useState([]);
-    const [singleCategory, setSingleCategory] = useState('all');
-    const [productsInCategory, setProductsInCategory] = useState([]);
     const [loading, setLoading] = useState(true);
 
     //helper object to prevent spelling errors
@@ -128,15 +123,31 @@ export default function Home() {
                 <button onClick={() => filterProductsByType(FILTER_TYPE.PRICE, 0, 25)}>Filter By Price</button>
                 <button onClick={() => filterProductsByType(FILTER_TYPE.RATING, 4, 5)}>Filter By Rating</button>
                 <button onClick={() => filterProductsByType(FILTER_TYPE.REVIEWS, 100, 300)}>Filter By Reviews</button>
-                <div className="grid grid-cols-8 gap-x-2 gap-y-4">
+                <div className="m-1 grid grid-cols-8 gap-x-2 gap-y-4">
 
                     <select className="col-span-3 capitalize border bg-trf-50 font-bold py-2 px-2 rounded shadow-md"
-                        onChange={(e) => showProductsInCategory(e.target.value)}>
+                        onChange={(e) => {showProductsInCategory(e.target.value)}}>
                         <option value="all"> category: all</option>
                         {allCategories.map((category) =>
                             <option value={category}>
                                 {category}
                             </option>)}
+                    </select>
+                </div>
+
+                <div className="m-1 grid grid-cols-8 gap-x-2 gap-y-4">
+
+                    <select className="col-span-3 capitalize border bg-trf-50 font-bold py-2 px-2 rounded shadow-md"
+                        onChange={(e) => {
+                            sortProductsByType(e.target.value)
+                        }}>
+                        <option value="all"> sort by: all</option>
+                        <option value={SORT_TYPE.PRICE_ASCENDING}> Price Ascending</option>
+                        <option value={SORT_TYPE.PRICE_DESCENDING}> Price Descending</option>
+                        <option value={SORT_TYPE.RATING_ASCENDING}> Rating Ascending</option>
+                        <option value={SORT_TYPE.RATING_DESCENDING}> Rating Descending</option>
+                        <option value={SORT_TYPE.REVIEWS_ASCENDING}> Review Count Ascending</option>
+                        <option value={SORT_TYPE.REVIEWS_DESCENDING}> Review Count Descending</option>
                     </select>
                 </div>
 

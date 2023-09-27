@@ -48,7 +48,7 @@ export default function SignIn() {
         if (isSignedIn) {
             return (
                 <div className="m-2">
-                    <button className="w-16 sm:w-24 md:w-28 px-2 py-2.5 bg-rose-300 hover:bg-rose-400 hover:text-rose-700 text-rose-950 rounded-lg text-md" onClick={logOut}>Sign Out</button>
+                    <button className="font-bold w-28 px-2 py-2.5 bg-rose-300 hover:bg-rose-400 hover:text-rose-700 text-rose-950 rounded-lg text-md" onClick={logOut}>Sign Out</button>
                 </div>
             )
         }

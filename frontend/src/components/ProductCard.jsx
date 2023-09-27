@@ -12,10 +12,10 @@ export default function ProductCard({ product }) {
             <img className="h-40 sm:h-48 w-full object-fill" src={image} />
             <div className="m-2">
                 <h1 className="font-bold m-2">{title}</h1>
-                <div className="grid grid-cols-8  justify-start">
-                    <img className="w-5 h-5 inline-block" src={star} alt="rating" />
-
-                    <span className="">{parseFloat(rating.rate).toFixed(2)}</span>
+                <div className="">
+                    <img className="w-5 h-5 p-1 inline-block" src={star} alt="rating" />
+                    <span className="m-1 p-1">{parseFloat(rating.rate).toFixed(2)}</span>
+                    <span className="m-1 p-1">{rating.count} ratings</span>
                 </div>
                 <p className="font-bold m-2">${parseFloat(price).toFixed(2)}</p>
             </div>

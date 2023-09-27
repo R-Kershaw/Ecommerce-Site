@@ -19,6 +19,7 @@ export default function ProductDetails() {
             console.log(singleProduct, quantity);
             //update the client's cart
             console.log(quantity);
+            alert("Added to cart!");
             dispatch({ type: CART_ACTION.ADD_PRODUCT, payload: { id: singleProduct.id, quantity: parseInt(quantity) } });
             //    console.log('Cart Page state:', cart);
 
@@ -57,9 +58,9 @@ export default function ProductDetails() {
                     <p className="capitalize font-sm m-2">{singleProduct.category}</p>
                     <hr className="m-2"></hr>
                     <div className="">
-                        <img className="m-1 w-5 h-5 inline-block" src={star} alt="rating" />
-                        <span className="m-1">{parseFloat(singleProduct.rating.rate).toFixed(2)}</span>
-                        <span className="m-1">{singleProduct.rating.count} ratings</span>
+                        <img className="m-1 p-1 w-5 h-5 inline-block" src={star} alt="rating" />
+                        <span className="m-1 p-1">{parseFloat(singleProduct.rating.rate).toFixed(2)}</span>
+                        <span className="m-1 p-1">{singleProduct.rating.count} ratings</span>
                     </div>
                     <p className="font-bold m-2">${singleProduct.price}</p>
 
@@ -68,7 +69,8 @@ export default function ProductDetails() {
 
                     <div className="m-2 grid grid-cols-6 gap-x-2 gap-y-4">
 
-                        <select className="w-20 sm:w-28 md:w-36 col-span-2 border border-trf-950 shadow-md overflow-hidden relative hover:shadow-lg cursor-pointer" value={quantity} onChange={(e) => setQuantity(e.target.value)}>
+                        <select className="w-20 sm:w-28 md:w-36 col-span-2 border border-trf-950 shadow-md overflow-hidden relative hover:shadow-lg cursor-pointer" value={quantity}
+                            onChange={(e) => setQuantity(e.target.value)}>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
