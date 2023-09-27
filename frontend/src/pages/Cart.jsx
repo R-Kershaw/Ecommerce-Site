@@ -61,13 +61,14 @@ export default function Cart() {
                 return cartItem.product;
             }
         }
+        return null;
     }
 
-    async function editProduct(productId, productQuantity) {
+    async function editProduct(productId, productQuantity, productPrice) {
         try {
             //update the client's cart
             console.log(productId, productQuantity);
-            cart.dispatch({ type: CART_ACTION.EDIT_PRODUCT, payload: { id: productId, quantity: parseInt(productQuantity) } });
+            cart.dispatch({ type: CART_ACTION.EDIT_PRODUCT, payload: { id: productId, quantity: parseInt(productQuantity), price:productPrice } });
 
             let newCart = [...checkOutCart];
             let foundProduct = findProductbyId(newCart, productId);
@@ -86,9 +87,9 @@ export default function Cart() {
         }
     }
 
-    async function deleteProduct(productId) {
+    async function deleteProduct(productId, productPrice) {
         try {
-            cart.dispatch({ type: CART_ACTION.DELETE_PRODUCT, payload: { id: productId } });
+            cart.dispatch({ type: CART_ACTION.DELETE_PRODUCT, payload: { id: productId, price:productPrice } });
 
             let newCart = [...checkOutCart];
             let foundProduct = findProductbyId(newCart, productId);
@@ -111,9 +112,9 @@ export default function Cart() {
         }
     }
 
-    async function calculateTotal(cart1) {
+    async function calculateTotal(cart) {
         try {
-            let tempCart = [...cart1];
+            let tempCart = [...cart];
             return parseFloat(tempCart.reduce((sum, cartItem) => sum + (cartItem.product.price * cartItem.quantity), 0)).toFixed(2);
         } catch (error) {
             console.log(error);
@@ -134,7 +135,7 @@ export default function Cart() {
                         ))}
                     </div>
                     <div className="my-2 inline-block col-span-1 capitalize border bg-trf-50  shadow-md font-bold py-2 px-2 rounded w-full">
-                        <p className="">{`SubTotal: (${checkOutTotalPrice})`}</p>
+                        <p className="">{`SubTotal: (${cart.totalPrice})`}</p>
                         <hr></hr>
                         <p className="">{`Item Count: (${cart.totalQuantity})`}</p>
                     </div>

@@ -11,8 +11,6 @@ export default function CartItem({ product, quantity, editProduct, deleteProduct
         setProductQuantity(quantity);
     }, []);
 
-
-
     return (
         <div className="grid grid-cols-6 border bg-trf-50 rounded-lg my-2 shadow-md overflow-hidden relative hover:shadow-lg">
             <div className="bg-white flex cursor-pointer col-span-1 sm:col-span-2">
@@ -32,8 +30,8 @@ export default function CartItem({ product, quantity, editProduct, deleteProduct
                 <div className="m-2 grid grid-cols-3 gap-x-2 gap-y-4">
                     <select className="w-20 sm:w-28 md:w-36 col-span-2 border border-trf-950 shadow-md overflow-hidden relative hover:shadow-lg cursor-pointer" value={productQuantity}
                         onChange={(e) => {
-                            editProduct(id, e.target.value)
-                            setProductQuantity(e.target.value)
+                            editProduct(id, e.target.value, price);
+                            setProductQuantity(e.target.value);
                         }}>
                         <option value="1">1</option>
                         <option value="2">2</option>

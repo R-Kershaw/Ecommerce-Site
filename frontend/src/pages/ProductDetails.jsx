@@ -20,7 +20,7 @@ export default function ProductDetails() {
             //update the client's cart
             console.log(quantity);
             alert("Added to cart!");
-            dispatch({ type: CART_ACTION.ADD_PRODUCT, payload: { id: singleProduct.id, quantity: parseInt(quantity) } });
+            dispatch({ type: CART_ACTION.ADD_PRODUCT, payload: { id: singleProduct.id, quantity: parseInt(quantity), price: parseFloat(singleProduct.price)}});
             //    console.log('Cart Page state:', cart);
 
         } catch (error) {
