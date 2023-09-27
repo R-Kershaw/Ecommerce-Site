@@ -22,7 +22,7 @@ export const cartReducer = (state, action) => {
 
     switch (action.type) {
         case CART_ACTION.FETCH_CART:
-            break;
+            return {...state}
         case CART_ACTION.ADD_PRODUCT: //if a product already exists in the cart then update its quantity property, otherwise add the new product to the end of the cart
             newQuantity += action.payload.quantity;
             //update the newly modified product that was found

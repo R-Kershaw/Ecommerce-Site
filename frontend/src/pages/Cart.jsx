@@ -5,7 +5,7 @@ import { getSingleProduct } from "../api";
 import CartItem from "../components/CartItem";
 
 export default function Cart() {
-    const { totalQuantity, dispatch } = useContext(CartContext);
+    const cart = useContext(CartContext);
     const [checkOutCart, setCheckOutCart] = useState([]);
     const [checkOutTotalPrice, setCheckOutTotalPrice] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -67,7 +67,7 @@ export default function Cart() {
         try {
             //update the client's cart
             console.log(productId, productQuantity);
-            dispatch({ type: CART_ACTION.EDIT_PRODUCT, payload: { id: productId, quantity: parseInt(productQuantity) } });
+            cart.dispatch({ type: CART_ACTION.EDIT_PRODUCT, payload: { id: productId, quantity: parseInt(productQuantity) } });
 
             let newCart = [...checkOutCart];
             let foundProduct = findProductbyId(newCart, productId);
@@ -88,7 +88,7 @@ export default function Cart() {
 
     async function deleteProduct(productId) {
         try {
-            dispatch({ type: CART_ACTION.DELETE_PRODUCT, payload: { id: productId } });
+            cart.dispatch({ type: CART_ACTION.DELETE_PRODUCT, payload: { id: productId } });
 
             let newCart = [...checkOutCart];
             let foundProduct = findProductbyId(newCart, productId);
@@ -104,16 +104,16 @@ export default function Cart() {
 
     async function deleteCart(productId) {
         try {
-            dispatch({ type: CART_ACTION.DELETE_CART, payload: { id: productId } });
+            cart.dispatch({ type: CART_ACTION.DELETE_CART, payload: { id: productId } });
             setCheckOutCart([]);
         } catch (error) {
             console.log(error);
         }
     }
 
-    async function calculateTotal(cart) {
+    async function calculateTotal(cart1) {
         try {
-            let tempCart = [...cart];
+            let tempCart = [...cart1];
             return parseFloat(tempCart.reduce((sum, cartItem) => sum + (cartItem.product.price * cartItem.quantity), 0)).toFixed(2);
         } catch (error) {
             console.log(error);
@@ -136,7 +136,7 @@ export default function Cart() {
                     <div className="my-2 inline-block col-span-1 capitalize border bg-trf-50  shadow-md font-bold py-2 px-2 rounded w-full">
                         <p className="">{`SubTotal: (${checkOutTotalPrice})`}</p>
                         <hr></hr>
-                        <p className="">{`Item Count: (${totalQuantity})`}</p>
+                        <p className="">{`Item Count: (${cart.totalQuantity})`}</p>
                     </div>
                 </div>
             </div>
