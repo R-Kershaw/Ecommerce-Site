@@ -21,7 +21,7 @@ export default function SignIn() {
             console.log(token);
             //set userData in authContext and localStorage
             if (userData.token) {
-                    navigate(`/`);
+                navigate(`/`);
             }
             else {
                 //create a notification displaying what the error is
@@ -37,36 +37,69 @@ export default function SignIn() {
     console.log(token);
     console.log(username);
 
+    function SignOut() {
+        function logOut() {
+            localStorage.clear();
+            dispatch({ type: AUTH_ACTION.SIGN_OUT });
+            //    setLoginStatus(false);
+            //    setLoginMessage("You are currently logged out.")
+        }
+
+        if (isSignedIn) {
+            return (
+                <div className="m-2">
+                    <button className="w-16 sm:w-24 md:w-28 px-2 py-2.5 bg-rose-300 hover:bg-rose-400 hover:text-rose-700 text-rose-950 rounded-lg text-md" onClick={logOut}>Sign Out</button>
+                </div>
+            )
+        }
+        return null;
+    }
+
+    function Greeting() {
+        if (isSignedIn) {
+            return <h1 className="font-bold m-4 rounded">User Account: {username}</h1>
+        }
+        return (
+            <h1 className="font-bold m-4 rounded">Sign Into Your Account</h1>
+        )
+    }
+
     return (
         <>
-            <h1>
-                Sign In Page
-            </h1>
-            <br></br>
-            <div>
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        Username:{""}
-                        <input
-                            value={username}
-                            onChange={(e) => dispatch({ type: AUTH_ACTION.SET_USERNAME, payload: e.target.value })}
-                        />
-                    </label>
-                    <label>
-                        Password:{""}
-                        <input type="password"
-                            value={password}
-                            onChange={(e) => dispatch({ type: AUTH_ACTION.SET_PASSWORD, payload: e.target.value })}
-                        />
-                    </label>
-                    <button>Sign In</button>
-                </form>
-                <br></br>
-                <button onClick={()=>{
-                    dispatch({type:AUTH_ACTION.SIGN_OUT});
-                    localStorage.clear();
-                }}>Sign Out</button>
+            <div className="m-2  border  bg-trf-50 rounded-lg  shadow-md overflow-hidden relative hover:shadow-lg">
+                <Greeting />
             </div>
+            <div className="m-2 border bg-trf-50 rounded-lg  shadow-md overflow-hidden relative hover:shadow-lg">
+                <form className=" rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" for="username">
+                            Username
+                            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                value={username}
+                                onChange={(e) => dispatch({ type: AUTH_ACTION.SET_USERNAME, payload: e.target.value })}
+                            />
+                        </label>
+                    </div>
+                    <div className="mb-6">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" for="password">
+                            Password
+                            <input type="password" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                                value={password}
+                                onChange={(e) => dispatch({ type: AUTH_ACTION.SET_PASSWORD, payload: e.target.value })}
+                            />
+                        </label>
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <button className="font-bold w-40 sm:w-56 md:w-64 px-2 py-2.5 bg-trf-200 hover:bg-trf-300 hover:text-trf-600 text-trf-950 rounded-lg text-md">
+                            Sign In
+                        </button>
+                        <button className="font-bold w-40 sm:w-56 md:w-64 px-2 py-2.5 border border-trf-950 bg-white hover:bg-trf-300 hover:text-trf-600 text-trf-950 rounded-lg text-md " href="#">
+                            Sign Up
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <SignOut />
         </>
     )
 }
