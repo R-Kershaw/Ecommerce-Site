@@ -48,14 +48,9 @@ export default function ProductDetails() {
     //Add styling to make this look better
     return (
         <>
-            <h1>
-                Product Details Page
-            </h1>
-            <br></br>
-
             <div className="m-2 grid grid-cols-6 border bg-trf-50 rounded-lg my-2 shadow-md overflow-hidden relative hover:shadow-lg">
                 <div className="bg-white flex col-span-2">
-                    <img className="object-contain"src={singleProduct.image} />
+                    <img className="object-contain" src={singleProduct.image} />
                 </div>
                 <div className="m-6 col-span-4">
                     <h1 className="font-bold m-2">{singleProduct.title}</h1>

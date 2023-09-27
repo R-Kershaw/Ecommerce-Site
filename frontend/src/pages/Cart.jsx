@@ -122,10 +122,6 @@ export default function Cart() {
 
     return (
         <>
-            <h1>
-                Cart Page
-            </h1>
-            <br></br>
             <div className="m-2">
                 <div className="capitalize border bg-trf-50  font-bold py-2 px-2 rounded w-full shadow-md">
                     <h1 className="m-2">Shopping Cart</h1>
