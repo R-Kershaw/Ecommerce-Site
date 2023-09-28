@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function Checkout() {
     const cart = useContext(CartContext);
     const [loading, setLoading] = useState(true);
+    const [totalPrice, setTotalPrice] = useState(0);
     const navigate = useNavigate();
 
     //prevent the user from visiting this page if the cart is empty
@@ -12,6 +13,8 @@ export default function Checkout() {
         if (cart.totalQuantity < 1) {
             navigate(`/`);
         }
+        let tempPrice = parseFloat(cart.totalPrice).toFixed(2);
+        setTotalPrice(tempPrice);
     }, []);
 
     //remove the contents of the cart after successfully completing your order
@@ -55,7 +58,7 @@ export default function Checkout() {
                             checkout
                         </button>
                         <hr></hr>
-                        <p className="m-2">{`SubTotal: $${cart.totalPrice.toFixed(2)}`}</p>
+                        <p className="m-2">{`SubTotal: $${totalPrice}`}</p>
 
                         <p className="m-2">{`Item Count: (${cart.totalQuantity})`}</p>
 

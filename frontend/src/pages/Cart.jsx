@@ -6,7 +6,8 @@ import CartItem from "../components/CartItem";
 
 export default function Cart() {
     const cart = useContext(CartContext);
-    const [checkOutCart, setCheckOutCart] = useState([]);
+    const [checkOutCart, setCheckOutCart] = useState([]); 
+    const [totalPrice, setTotalPrice] = useState(0); //parseFloat() returns a string, prevent NaN errors when displaying the cart.totalPrice
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -14,17 +15,32 @@ export default function Cart() {
         async function fetchData() {
             let initialCart = getLocalStorageCart();
 
-            //create a new array of products with their quantities. Wait for all the data to load before setting checkOutCart
-            const tempCart = await Promise.all(initialCart.map(async product => {
-                let tempProduct = await getSingleProduct(product.id);
-                return { 'product': tempProduct, 'quantity': product.quantity };
-            }));
+            //if local storage is empty initialize it
+            if (!initialCart) {
+                cart.dispatch({ type: CART_ACTION.DELETE_CART, payload: { id: 0 } });
 
-            setCheckOutCart(tempCart);
-            setLoading(false);
+                setCheckOutCart([]);
+                setLoading(false);
+            }
+            else {
+
+                //create a new array of products with their quantities. Wait for all the data to load before setting checkOutCart
+                const tempCart = await Promise.all(initialCart.map(async product => {
+                    let tempProduct = await getSingleProduct(product.id);
+                    return { 'product': tempProduct, 'quantity': product.quantity };
+                }));
+
+                setCheckOutCart(tempCart);
+                setLoading(false);
+            }
         }
         fetchData();
     }, []);
+
+    useEffect(() => {
+        let tempPrice = parseFloat(cart.totalPrice).toFixed(2);
+        setTotalPrice(tempPrice);
+    }, [cart.totalPrice])
 
     if (loading) {
         return (
@@ -128,7 +144,7 @@ export default function Cart() {
         if (cart.totalQuantity > 0) {
             return (
                 <div className="my-2 inline-block col-span-1 capitalize border bg-trf-50  shadow-md font-bold py-2 px-2 rounded w-full">
-                    <p className="m-2">{`SubTotal: $${cart.totalPrice.toFixed(2)}`}</p>
+                    <p className="m-2">{`SubTotal: $${totalPrice}`}</p>
                     <hr></hr>
                     <p className="m-2">{`Item Count: (${cart.totalQuantity})`}</p>
                     <button className="w-full uppercase font-bold px-2 py-2.5 bg-trf-400 hover:bg-trf-500 hover:text-trf-700 text-trf-950 rounded-lg text-md"

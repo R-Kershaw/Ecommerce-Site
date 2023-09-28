@@ -113,13 +113,14 @@ export const CartContextProvider = ({ children }) => {
     useEffect(() => {
         //if the local storage is null then initialize it
         let initialState = getLocalStorageState();
-        if (!initialState) {
+        if (initialState) {
             setLocalStorage();
             initialState = getLocalStorageState();
         } else {
-            state.cart = initialState.cart;
-            state.totalQuantity = initialState.totalQuantity;
-            state.totalPrice = initialState.totalPrice;
+            state.cart = [];
+            state.totalQuantity = 0;
+            state.totalPrice = 0;
+            setLocalStorage();
         }
     }, []);
 
