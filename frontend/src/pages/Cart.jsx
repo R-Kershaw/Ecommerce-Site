@@ -107,49 +107,34 @@ export default function Cart() {
     }
 
     function ShowEmptyCartMessage() {
-        if (cart.totalQuantity === 0) {
-            return (
-                <div className="grid col-span-2">
-                    <p className="grid grid-cols-6 border bg-trf-50 rounded-lg my-2 shadow-md overflow-hidden relative hover:shadow-lg">
-                        Your Cart is empty
-                    </p>
-                </div>
-            )
-        }
-        return null;
-    }
-
-    function ShowCart() {
-        if (cart.totalQuantity > 0) {
-            return (
-                <div className="grid grid-cols-3 gap-x-2 gap-y-4">
-                    <div className="grid col-span-2">
-                        {checkOutCart.map(cartItem => (
-                            //pass down edit and delete functions to children
-                            <CartItem key={cartItem.product.id} product={cartItem.product} quantity={cartItem.quantity} editProduct={editProduct} deleteProduct={deleteProduct} />
-                        ))}
-                    </div>
-                    <div className="my-2 inline-block col-span-1 capitalize border bg-trf-50  shadow-md font-bold py-2 px-2 rounded w-full">
-                        <p className="">{`SubTotal: $${cart.totalPrice.toFixed(2)}`}</p>
-                        <hr></hr>
-                        <p className="">{`Item Count: (${cart.totalQuantity})`}</p>
-                    </div>
-                </div>
-            )
-        } else {
+        if (cart.totalQuantity <= 0) {
             return (
                 <div className="grid grid-cols-3 gap-x-2 gap-y-4">
                     <div className=" my-2 col-span-2 inline-block capitalize border bg-red-300 shadow-md font-md py-2 px-2 rounded w-full">
                         <p className="my-2 capitalize font-bold py-2 px-2 text-red-950 text-2xl">Your cart is empty!</p>
                     </div>
                     <div className="my-2 inline-block col-span-1 capitalize border bg-trf-50 shadow-md font-bold py-2 px-2 rounded w-full">
-                        <p className="">{`SubTotal: $${cart.totalPrice.toFixed(2)}`}</p>
+                        <p className="">{`SubTotal: $0`}</p>
                         <hr></hr>
-                        <p className="">{`Item Count: (${cart.totalQuantity})`}</p>
+                        <p className="">{`Item Count: (0)`}</p>
                     </div>
                 </div>
             )
         }
+        return null;
+    }
+
+    function ShowSubTotal() {
+        if (cart.totalQuantity > 0) {
+            return (
+                <div className="my-2 inline-block col-span-1 capitalize border bg-trf-50  shadow-md font-bold py-2 px-2 rounded w-full">
+                    <p className="">{`SubTotal: $${cart.totalPrice.toFixed(2)}`}</p>
+                    <hr></hr>
+                    <p className="">{`Item Count: (${cart.totalQuantity})`}</p>
+                </div>
+            )
+        }
+        return null;
     }
 
     return (
@@ -158,9 +143,20 @@ export default function Cart() {
                 <div className="capitalize border bg-trf-50  font-bold py-2 px-2 rounded w-full shadow-md">
                     <h1 className="m-2">Shopping Cart</h1>
                 </div>
-                <ShowCart />
+                <ShowEmptyCartMessage />
+                <div className="grid grid-cols-3 gap-x-2 gap-y-4">
+                    <div className="grid col-span-2">
+                        {checkOutCart.map(cartItem => (
+                            //pass down edit and delete functions to children
+                            <CartItem key={cartItem.product.id} product={cartItem.product} quantity={cartItem.quantity} editProduct={editProduct} deleteProduct={deleteProduct} />
+                        ))}
+                    </div>
+                    <ShowSubTotal />
+                </div>
             </div>
             <br></br>
         </>
     )
+
+
 }

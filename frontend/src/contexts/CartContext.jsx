@@ -40,7 +40,7 @@ export const cartReducer = (state, action) => {
 
                 //keep the product quantity within the max limit
                 let maxLimit = 5;
-                if (foundProduct.quantity > maxLimit) {
+                if (foundProduct.quantity >= maxLimit) {
                     let difference = foundProduct.quantity - maxLimit;
                     newTotalQuantity -= difference;
                     newTotalPrice -= (difference * action.payload.price);
