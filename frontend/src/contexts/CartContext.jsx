@@ -1,4 +1,5 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
+import AuthContext from "./AuthContext";
 
 const CartContext = createContext();
 
@@ -89,6 +90,7 @@ export const cartReducer = (state, action) => {
 
 export const CartContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, { cart: [], totalQuantity: 0, totalPrice: 0 });
+    const { isSignedIn } = useContext(AuthContext);
 
     function setLocalStorage() {
         localStorage.setItem("state", JSON.stringify(state));
@@ -102,7 +104,7 @@ export const CartContextProvider = ({ children }) => {
         localStorage.removeItem("state");
     }
 
-    //if the user is logged in, fetch their saved cart from the server
+    //if the user is logged in, fetch their saved cart from the server. Can't do that with fake API store so just hold off on this for now
     useEffect(() => {
 
     }, []);

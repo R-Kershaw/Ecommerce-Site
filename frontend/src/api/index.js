@@ -50,9 +50,11 @@ export async function getProductsInCategory(categoryName) {
 
 /*** cart ***/
 //GET
-export async function getCartItems() {
+export async function getCartItems(userId) {
     try {
-
+        const response = await fetch(`${BASE_API_URL}/products/category/user/${userId}`);
+        const result = await response.json();
+        return result;
     } catch (error) {
         console.log(error);
     }

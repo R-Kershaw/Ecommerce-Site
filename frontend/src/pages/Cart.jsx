@@ -128,9 +128,13 @@ export default function Cart() {
         if (cart.totalQuantity > 0) {
             return (
                 <div className="my-2 inline-block col-span-1 capitalize border bg-trf-50  shadow-md font-bold py-2 px-2 rounded w-full">
-                    <p className="">{`SubTotal: $${cart.totalPrice.toFixed(2)}`}</p>
+                    <p className="m-2">{`SubTotal: $${cart.totalPrice.toFixed(2)}`}</p>
                     <hr></hr>
-                    <p className="">{`Item Count: (${cart.totalQuantity})`}</p>
+                    <p className="m-2">{`Item Count: (${cart.totalQuantity})`}</p>
+                    <button className="m-2 font-bold w-40 sm:w-56 md:w-64 px-2 py-2.5 bg-trf-400 hover:bg-trf-500 hover:text-trf-700 text-trf-950 rounded-lg text-xl"
+                        onClick={() => navigate(`/cart/checkout`)}>
+                        Proceed to checkout
+                    </button>
                 </div>
             )
         }
