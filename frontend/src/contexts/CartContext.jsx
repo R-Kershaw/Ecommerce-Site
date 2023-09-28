@@ -12,8 +12,7 @@ export const CART_ACTION = {
 
 export const cartReducer = (state, action) => {
     //treat objects as read only in the React State, use a copy to update the objects in state
-    if (!state)
-    {
+    if (!state) {
         console.log("state is null");
         return;
     }
@@ -27,7 +26,7 @@ export const cartReducer = (state, action) => {
     console.log(state);
     console.log(action);
     console.log(newCart);
-    
+
 
     switch (action.type) {
         case CART_ACTION.FETCH_CART:
@@ -47,7 +46,7 @@ export const cartReducer = (state, action) => {
                     newTotalPrice -= (difference * action.payload.price);
                     foundProduct.quantity = 5;
                 }
-               
+
                 return { ...state, cart: [...newCart], totalQuantity: newTotalQuantity, totalPrice: newTotalPrice }
             }
             //add the new product to the end of the cart since it doesn't exist yet
@@ -64,7 +63,7 @@ export const cartReducer = (state, action) => {
                 newTotalPrice += (action.payload.quantity * action.payload.price);
                 console.log(newTotalPrice);
                 foundProduct.quantity = action.payload.quantity;
-                return { ...state, cart: [...newCart], totalQuantity: newTotalQuantity, totalPrice:newTotalPrice }
+                return { ...state, cart: [...newCart], totalQuantity: newTotalQuantity, totalPrice: newTotalPrice }
             }
             else {
                 return { ...state }
@@ -82,7 +81,7 @@ export const cartReducer = (state, action) => {
                 return { ...state }
             }
         case CART_ACTION.DELETE_CART:
-            return { ...state, cart: [], totalQuantity: 0, totalPrice:0 }
+            return { ...state, cart: [], totalQuantity: 0, totalPrice: 0 }
         default:
             throw Error('Unknown action: ' + action.type);
     }
@@ -97,6 +96,10 @@ export const CartContextProvider = ({ children }) => {
 
     function getLocalStorageState() {
         return JSON.parse(localStorage.getItem("state"));
+    }
+
+    function deleteLocalStorageState() {
+        localStorage.removeItem("state");
     }
 
     //if the user is logged in, fetch their saved cart from the server

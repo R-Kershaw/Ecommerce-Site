@@ -39,8 +39,8 @@ export default function SignIn() {
 
     function SignOut() {
         function logOut() {
-            localStorage.clear();
             dispatch({ type: AUTH_ACTION.SIGN_OUT });
+            localStorage.removeItem("tokenId");
             //    setLoginStatus(false);
             //    setLoginMessage("You are currently logged out.")
         }
