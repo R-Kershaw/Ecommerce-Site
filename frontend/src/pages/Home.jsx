@@ -11,7 +11,7 @@ export default function Home() {
     const [selectedSort, setSelectedSort] = useState("default");
     const [selectedFilter, setSelectedFilter] = useState("default");
     const [filterMin, setFilterMin] = useState(0);
-    const [filterMax, setFilterMax] = useState(0);
+    const [filterMax, setFilterMax] = useState(Number.MAX_SAFE_INTEGER);
 
     //helper object to prevent spelling errors
     const SORT_TYPE = {
@@ -51,8 +51,6 @@ export default function Home() {
     }, [selectedSort]);
 
     useEffect(() => {
-        console.log(filterMin, filterMax);
-        console.log(allProducts.filter(product => product.category === selectedCategory && product.price >= filterMin && product.price <= filterMax));
         filterProductsByType(selectedFilter);
     }, [selectedFilter]);
 
@@ -92,44 +90,6 @@ export default function Home() {
         }
         setAllProducts(sortedProducts);
     }
-
-    //filter by price, rating, and review count based on a min and max value
-    /*    function filterProductsByType(type, min, max) {
-            let filteredProducts = [...allProducts];
-            switch (type) {
-                case FILTER_TYPE.PRICE:
-                    filteredProducts = [...allProducts].filter((product) => product.price >= min && product.price <= max);
-                    break;
-                case FILTER_TYPE.RATING:
-                    filteredProducts = [...allProducts].filter((product) => product.rating.rate >= min && product.rating.rate <= max);
-                    break;
-                case FILTER_TYPE.REVIEWS:
-                    filteredProducts = [...allProducts].filter((product) => product.rating.count >= min && product.rating.count <= max);
-                    break;
-                default:
-                    break;
-            }
-            setAllProducts(filteredProducts);
-            console.log(filteredProducts);
-        }
-        function filterProductsByType(type) {
-            let filteredProducts = [...allProducts];
-            switch (type) {
-                case FILTER_TYPE.PRICE:
-                    filteredProducts = [...allProducts].filter((product) => product.price >= min && product.price <= max);
-                    break;
-                case FILTER_TYPE.RATING:
-                    filteredProducts = [...allProducts].filter((product) => product.rating.rate >= min && product.rating.rate <= max);
-                    break;
-                case FILTER_TYPE.REVIEWS:
-                    filteredProducts = [...allProducts].filter((product) => product.rating.count >= min && product.rating.count <= max);
-                    break;
-                default:
-                    break;
-            }
-            setAllProducts(filteredProducts);
-            console.log(filteredProducts);
-        }*/
 
     function filterProductsByType(type) {
         console.log('entered');
@@ -204,12 +164,6 @@ export default function Home() {
                 </div>
 
                 <div className="my-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-4">
-                    {/*allProducts.map(product => (
-                        <ProductCard
-                            key={product.id}
-                            product={product}
-                        />
-                    ))*/}
                     {selectedCategory !== 'default' && selectedFilter !== 'default' //if the category and filter are both selected
                         ? allProducts.filter(product => product.category === selectedCategory && product.price >= filterMin && product.price <= filterMax).map(product => (
                             <ProductCard
@@ -224,7 +178,7 @@ export default function Home() {
                                     product={product}
                                 />
                             ))
-                            : selectedFilter !== 'default' //if the filter is set only
+                            : selectedFilter !== 'default' //if the filter is selected only
                                 ? allProducts.filter(product => product.price >= filterMin && product.price <= filterMax).map(product => (
                                     <ProductCard
                                         key={product.id}
