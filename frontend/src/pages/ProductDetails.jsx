@@ -20,7 +20,7 @@ export default function ProductDetails() {
             //update the client's cart
             console.log(quantity);
             alert("Added to cart!");
-            dispatch({ type: CART_ACTION.ADD_PRODUCT, payload: { id: singleProduct.id, quantity: parseInt(quantity), price: parseFloat(singleProduct.price)}});
+            dispatch({ type: CART_ACTION.ADD_PRODUCT, payload: { id: singleProduct.id, quantity: parseInt(quantity), price: singleProduct.price}});
             //    console.log('Cart Page state:', cart);
 
         } catch (error) {
@@ -62,7 +62,7 @@ export default function ProductDetails() {
                         <span className="m-1 p-1">{parseFloat(singleProduct.rating.rate).toFixed(2)}</span>
                         <span className="m-1 p-1">{singleProduct.rating.count} ratings</span>
                     </div>
-                    <p className="font-bold m-2">${singleProduct.price}</p>
+                    <p className="font-bold m-2">${parseFloat(singleProduct.price).toFixed(2)}</p>
 
                     <p className="font-medium m-2">{singleProduct.description}</p>
 
