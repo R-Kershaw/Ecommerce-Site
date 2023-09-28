@@ -106,9 +106,37 @@ export async function getOrder(order) {
 
 /*** users ***/
 //POST
-export async function registerUser(username, password) {
+export async function registerUser(email, username, password, firstname, lastname, city, street, number, zipcode, lat, long, phone) {
     try {
-
+        const response = await fetch(`${BASE_API_URL}/users`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                username: username,
+                password: password,
+                name: {
+                    firstname: firstname,
+                    lastname: lastname
+                },
+                address: {
+                    city: city,
+                    street: street,
+                    number: number,
+                    zipcode: zipcode,
+                    geolocation: {
+                        lat: lat,
+                        long: long
+                    }
+                },
+                phone: phone
+            })
+        });
+        const result = await response.json();
+        console.log(result);
+        return result;
     } catch (error) {
         console.log(error);
     }

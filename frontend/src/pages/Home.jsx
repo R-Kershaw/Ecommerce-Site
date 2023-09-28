@@ -92,7 +92,6 @@ export default function Home() {
     }
 
     function filterProductsByType(type) {
-        console.log('entered');
         switch (type) {
             case FILTER_TYPE.PRICE_0_25:
                 setFilterMin(0);

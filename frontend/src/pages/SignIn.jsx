@@ -93,7 +93,9 @@ export default function SignIn() {
                         <button className="font-bold w-40 sm:w-56 md:w-64 px-2 py-2.5 bg-trf-200 hover:bg-trf-300 hover:text-trf-600 text-trf-950 rounded-lg text-md">
                             Sign In
                         </button>
-                        <button className="font-bold w-40 sm:w-56 md:w-64 px-2 py-2.5 border border-trf-950 bg-white hover:bg-trf-300 hover:text-trf-600 text-trf-950 rounded-lg text-md " href="#">
+                        <button type="button"
+                            className="font-bold w-40 sm:w-56 md:w-64 px-2 py-2.5 border border-trf-950 bg-white hover:bg-trf-300 hover:text-trf-600 text-trf-950 rounded-lg text-md "
+                            onClick={() => navigate(`/users/signup`)}>
                             Sign Up
                         </button>
                     </div>
