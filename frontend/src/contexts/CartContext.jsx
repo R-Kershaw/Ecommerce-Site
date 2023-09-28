@@ -55,14 +55,16 @@ export const cartReducer = (state, action) => {
                 return { ...state, cart: [...state.cart, { id: action.payload.id, quantity: action.payload.quantity }], totalQuantity: newTotalQuantity, totalPrice: newTotalPrice }
             }
         case CART_ACTION.EDIT_PRODUCT: //you can only edit products that exist in the cart
-
             if (foundProduct) {
                 //update the totalQuantity with the new product quantity
                 newTotalQuantity -= foundProduct.quantity;
-                newTotalQuantity += action.payload.quantity;
+                newTotalPrice -= (foundProduct.quantity * action.payload.price);
 
+                newTotalQuantity += action.payload.quantity;
+                newTotalPrice += (action.payload.quantity * action.payload.price);
+                console.log(newTotalPrice);
                 foundProduct.quantity = action.payload.quantity;
-                return { ...state, cart: [...newCart], totalQuantity: newTotalQuantity }
+                return { ...state, cart: [...newCart], totalQuantity: newTotalQuantity, totalPrice:newTotalPrice }
             }
             else {
                 return { ...state }
@@ -74,13 +76,13 @@ export const cartReducer = (state, action) => {
                 console.log(newTotalPrice);
                 //don't need to use newCart because filter already returns a shallow copy of the array
                 const filteredOutProducts = state.cart.filter(product => product.id !== action.payload.id);
-                return { ...state, cart: [...filteredOutProducts], totalQuantity: newTotalQuantity, totalPrice: 0 }
+                return { ...state, cart: [...filteredOutProducts], totalQuantity: newTotalQuantity, totalPrice: newTotalPrice }
             }
             else {
                 return { ...state }
             }
         case CART_ACTION.DELETE_CART:
-            return { ...state, cart: [], totalQuantity: 0 }
+            return { ...state, cart: [], totalQuantity: 0, totalPrice:0 }
         default:
             throw Error('Unknown action: ' + action.type);
     }

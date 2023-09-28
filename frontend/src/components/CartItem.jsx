@@ -40,7 +40,7 @@ export default function CartItem({ product, quantity, editProduct, deleteProduct
                         <option value="5">5</option>
                     </select>
                     <button className="w-16 sm:w-24 md:w-28 px-2 py-2.5 bg-rose-300 hover:bg-rose-400 hover:text-rose-700 text-rose-950 rounded-lg text-md"
-                        onClick={() => deleteProduct(id)}>Delete</button>
+                        onClick={() => deleteProduct(id, price)}>Delete</button>
                 </div>
             </div>
         </div>

@@ -7,7 +7,6 @@ import CartItem from "../components/CartItem";
 export default function Cart() {
     const cart = useContext(CartContext);
     const [checkOutCart, setCheckOutCart] = useState([]);
-    const [checkOutTotalPrice, setCheckOutTotalPrice] = useState(0);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -20,9 +19,6 @@ export default function Cart() {
                 let tempProduct = await getSingleProduct(product.id);
                 return { 'product': tempProduct, 'quantity': product.quantity };
             }));
-
-            let tempTotal = await calculateTotal(tempCart);
-            setCheckOutTotalPrice(tempTotal);
 
             setCheckOutCart(tempCart);
             setLoading(false);
@@ -79,8 +75,6 @@ export default function Cart() {
                 foundProduct.quantity = productQuantity;
                 console.log(newCart);
                 setCheckOutCart([...newCart]);
-
-                let tempPrice = await calculateTotal(checkOutCart);
             }
         } catch (error) {
             console.log(error);
@@ -135,7 +129,7 @@ export default function Cart() {
                         ))}
                     </div>
                     <div className="my-2 inline-block col-span-1 capitalize border bg-trf-50  shadow-md font-bold py-2 px-2 rounded w-full">
-                        <p className="">{`SubTotal: (${cart.totalPrice})`}</p>
+                        <p className="">{`SubTotal: $${cart.totalPrice.toFixed(2)}`}</p>
                         <hr></hr>
                         <p className="">{`Item Count: (${cart.totalQuantity})`}</p>
                     </div>
