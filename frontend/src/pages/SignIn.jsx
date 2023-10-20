@@ -77,6 +77,7 @@ export default function SignIn() {
                             <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 value={username}
                                 onChange={(e) => dispatch({ type: AUTH_ACTION.SET_USERNAME, payload: e.target.value })}
+                                required
                             />
                         </label>
                     </div>
@@ -86,6 +87,7 @@ export default function SignIn() {
                             <input type="password" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                                 value={password}
                                 onChange={(e) => dispatch({ type: AUTH_ACTION.SET_PASSWORD, payload: e.target.value })}
+                                required
                             />
                         </label>
                     </div>
